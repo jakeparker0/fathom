@@ -1,0 +1,21 @@
+[project]
+name = "fathom"
+version = "0.1.0"
+description = "Personal finance management app"
+requires-python = ">=3.12"
+dependencies = []
+
+
+authors = [
+    { name = "jakeparker0", email = "jakebparker17@gmail.com" }
+]
+
+[dependency-groups]
+dev = [
+    "ruff",
+    "pytest",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
