@@ -18,7 +18,6 @@ dist/
 .venv/
 venv/
 env/
-.python-version
 
 # Dependency managers
 # (uncomment relevant lines once S1-02 picks the tool)
