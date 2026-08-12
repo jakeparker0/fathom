@@ -103,11 +103,11 @@ This table is updated as each decision lands.
 Expected shape:
 
 ```bash
-git clone <repo-url>
+git clone www.github.com/jakeparker0/fathom
 cd fathom
 
 # install dependencies (tool TBC — uv or Poetry)
-<install command>
+uv sync
 
 # start local database
 docker compose up -d
