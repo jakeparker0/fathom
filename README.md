@@ -85,6 +85,7 @@ Domain vocabulary used throughout the codebase. Several of these terms are Up Ba
 
 | Decision | ADR |
 |---|---|
+| Branching Strategy | `ADR-001` | 
 | Backend framework | `ADR-002` |
 | Frontend approach | `ADR-003` |
 | Database (Postgres leaning, SQLite under consideration) | `ADR-004` |
