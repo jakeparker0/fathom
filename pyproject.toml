@@ -3,7 +3,9 @@ name = "fathom"
 version = "0.1.0"
 description = "Personal finance management app"
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "pydantic-settings>=2.6",
+]
 
 
 authors = [
@@ -15,6 +17,10 @@ dev = [
     "ruff",
     "pytest",
 ]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
 
 [build-system]
 requires = ["hatchling"]
