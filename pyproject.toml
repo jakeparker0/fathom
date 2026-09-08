@@ -16,6 +16,7 @@ authors = [
 dev = [
     "ruff",
     "pytest",
+    "psycopg[binary]>=3.3.5",
 ]
 
 [tool.pytest.ini_options]
