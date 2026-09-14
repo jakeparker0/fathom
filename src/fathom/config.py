@@ -93,7 +93,7 @@ class Settings(BaseSettings):
         description="Password for the local Postgres role.",
     )
     # TODO:Driver is configurable because the backend framework choice (ADR-002) is
-    # not yet made; psycopg3 sync is the safe default. 
+    # not yet made; psycopg3 sync is the safe default.
     postgres_driver: str = "postgresql+psycopg"
 
     @field_validator("up_api_token", "postgres_password")

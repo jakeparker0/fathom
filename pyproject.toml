@@ -17,6 +17,7 @@ dev = [
     "ruff",
     "pytest",
     "psycopg[binary]>=3.3.5",
+    "pre-commit>=4.6.2",
 ]
 
 [tool.pytest.ini_options]
