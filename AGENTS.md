@@ -22,7 +22,10 @@ are defined in `CONTEXT.md`. Use them exactly; don't invent synonyms.
   moves it) and counts at that Account's share. Never apply a share inline. See ADR-009.
 - All period boundaries come from the single date-range resolver. Never compute
   the 15th–14th pay-cycle (or any period) inline.
-- Money Representation will be integers in cents (base units).
+- Money amounts are integer cents: `int` in Python, `BIGINT` in Postgres, a number in
+  the API. Unit prices, units held, rates and percentages are `Decimal` / `NUMERIC`.
+  The two meet only in the single rounding function in `domain/`. No money amount is
+  ever a `float`. See ADR-004 (Amendment).
 
 ## Architecture
 
@@ -58,8 +61,20 @@ write the implementation. Label related tickets `ready-for-human`.
 
 ## Coding standards
 
-<!-- S1-32: a handful of rules that apply to every edit (typing, naming, error handling).
-     The full review checklist goes in docs/agents/, referenced not imported. -->
+- Sync only: plain `def`, synchronous clients and sessions (ADR-002).
+- Annotate every signature. Use a `StrEnum` for a closed set of values, and a typed
+  model rather than a bare `dict` across a layer boundary. No `Any`.
+- A `# type: ignore` or `# noqa` names its code and gives the reason on the same line.
+- Name modules for their feature, the same name in every layer
+  (`api/transactions.py`, `services/transactions.py`).
+- Name tests for the behaviour they prove (`test_blank_secret_is_rejected`).
+- Raise a specific exception where the problem is found. Only `api/` turns exceptions
+  into HTTP responses.
+- An `except` handles the error or re-raises it.
+- Validate external data (Up payloads, CSV rows, prices) into a typed model before a
+  service sees it.
+
+Reviewing a diff: check it against every item in `docs/agents/review-checklist.md`.
 
 
 ## Agent skills
