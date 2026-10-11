@@ -63,3 +63,8 @@ logs/
 node_modules/
 dist/
 .vite/
+
+data/recon/*
+
+.claude/settings.local.json
+CLAUDE.local.md
