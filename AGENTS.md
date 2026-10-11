@@ -17,6 +17,9 @@ are defined in `CONTEXT.md`. Use them exactly; don't invent synonyms.
 
 - Transfers and Covers never count as spend, in any aggregation. There is no toggle.
 - Spend is net of linked Reimbursements by default; gross is opt-in.
+- Joint accounts count at a fixed 50% for balance, Spend and Income, in every
+  aggregation. Spend is attributed to the Account that funded it (a confirmed Cover
+  moves it) and counts at that Account's share. Never apply a share inline. See ADR-009.
 - All period boundaries come from the single date-range resolver. Never compute
   the 15th–14th pay-cycle (or any period) inline.
 - Money Representation will be integers in cents (base units).
