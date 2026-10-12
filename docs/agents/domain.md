@@ -18,8 +18,9 @@ This is a single-context repo:
 ├── CONTEXT.md
 ├── docs/adr/
 │   ├── 000-template.md
-│   ├── 002-backend-framework.md
-│   └── 004-database.md
+│   ├── 001-branching-strategy.md
+│   ├── ...
+│   └── 009-joint-account-share-and-cover-attribution.md
 └── src/
 ```
 

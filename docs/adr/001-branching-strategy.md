@@ -34,7 +34,7 @@ Trunk-based development with short-lived feature branches, merged into `main` vi
 
 - Every change, including AI-generated code, passes through a PR — this is what makes the S1-29 CI pipeline (lint, type checks, tests) an actual gate rather than a passive check against history.
 - Branch naming stays traceable to the Sprint Planning workbook's task refs, making it easy to reconcile git history against planned work.
-- No overhead from managing parallel release lines — appropriate since Fathom has one deployment target (the OCI instance) and no external users depending on version stability.
+- No overhead from managing parallel release lines — appropriate since Fathom has one deployment target (the AWS deployment) and no external users depending on version stability.
 - If the project ever grew beyond single-developer, single-deployment-target use, this strategy would need revisiting — not a concern in the current scope.
 
 ## Notes

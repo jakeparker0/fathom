@@ -7,7 +7,7 @@
 
 Fathom needs a relational database to store all application and transactional data: accounts, transactions and their relationships (transfers, covers, splits, reimbursements), categories and tags, trades and dividends, and daily portfolio and net worth snapshots.
 
-The database must be straightforward to interface with from Python, have a repeatable local setup and a standard deployment path to the OCI compute instance in Sprint 6, and support the analytical workload in Sprint 5 — rolling-average category trends (BF-03), spend aggregated over a configurable pay-cycle period rather than a calendar month (SA-01), and per-holding-per-day snapshot rows aggregated at query time rather than pre-computed (SP-11).
+The database must be straightforward to interface with from Python, have a repeatable local setup and a standard deployment path to the AWS host in Sprint 6, and support the analytical workload in Sprint 5 — rolling-average category trends (BF-03), spend aggregated over a configurable pay-cycle period rather than a calendar month (SA-01), and per-holding-per-day snapshot rows aggregated at query time rather than pre-computed (SP-11).
 
 Two properties of the application push in opposite directions. It is explicitly single-user with no concurrency requirement, which is SQLite's ideal case. It is also money-handling and reporting-heavy, with a schema that will be migrated repeatedly as the relationship model in S1-21 is refined, which favours a fuller engine.
 
@@ -27,7 +27,7 @@ This decision is about the database engine. How that engine is *run* locally (Do
   - Local development matches production exactly, so no class of bug can appear only after deployment.
 - Cons:
   - Requires a running container and therefore a container runtime. Real setup cost, already paid during S1-03 and non-trivial on a fresh machine.
-  - Consumes memory on the OCI instance that a file-based database would not.
+  - Consumes memory on the AWS host that a file-based database would not.
   - Backup and restore is a deliberate task (`pg_dump`/`pg_restore` plus volume management) rather than copying a file. Adds scope to Sprint 6.
   - More moving parts to keep running for an application with exactly one user.
 
@@ -61,7 +61,7 @@ This decision is about the database engine. How that engine is *run* locally (Do
 
 ## Decision
 
-PostgreSQL, run locally as a Docker container and deployed to the OCI compute instance in Sprint 6.
+PostgreSQL, run locally as a Docker container and deployed to the AWS host in Sprint 6.
 
 The deciding factor is type fidelity rather than performance or scale: exact decimal arithmetic and real date/time types for pay-cycle and snapshot logic are the two things SQLite cannot provide without workarounds, and they sit underneath every figure the application reports.
 
@@ -81,14 +81,14 @@ As amended on 2026-10-11, money amounts are stored as integer cents and `NUMERIC
 
 - A container runtime is now a hard prerequisite for local development. This must be stated explicitly in the S1-30 runbook, including the installation step, since a Docker CLI without an engine fails in a way that is not self-explanatory.
 - Backup and restore in Sprint 6 becomes a designed task rather than a file copy.
-- Postgres consumes memory on the OCI instance that would otherwise be available to the application.
+- Postgres consumes memory on the AWS host that would otherwise be available to the application.
 - Local data now lives in a Docker named volume rather than in the project directory — recoverable only until someone runs `docker compose down -v`.
 
 **Commits us to:**
 
 - `psycopg` (v3) as the driver, currently a dev dependency and to be promoted to a runtime dependency once the framework decision in ADR-002 lands.
 - Alembic against Postgres for all migrations (S1-25).
-- Running Postgres on the OCI compute instance in Sprint 6, including backup, restore and upgrade ownership.
+- Running Postgres on the AWS host in Sprint 6, including backup, restore and upgrade ownership.
 - Integer cents for every money amount, in the database, in Python and across the API. No money amount is ever a `float`.
 - Pinning the Postgres major version. Major upgrades require `pg_upgrade` and will not start against an existing data directory.
 
@@ -132,5 +132,5 @@ Exact decimal storage for money was one of the two deciding factors against SQLi
 
 - Version pinned to `postgres:18` in `docker-compose.yml`. Note that Postgres 18 changed the image's data directory layout: `PGDATA` is now version-specific (`/var/lib/postgresql/18/docker`) and the volume mounts at `/var/lib/postgresql`, not `/var/lib/postgresql/data` as most existing documentation states.
 - SQLite was a genuinely close call, not a straw man. If Fathom had been a spending tracker without the portfolio, snapshot and forecasting workstreams, SQLite would likely have been the better choice.
-- Triggers to revisit: sustained operational burden from self-hosting on OCI; the analytical queries in Sprint 5 proving slow enough to warrant materialised views or a different storage approach for snapshots; or the application scope expanding beyond a single user, which would invalidate the premise that concurrency is a non-issue.
+- Triggers to revisit: sustained operational burden from self-hosting on AWS; the analytical queries in Sprint 5 proving slow enough to warrant materialised views or a different storage approach for snapshots; or the application scope expanding beyond a single user, which would invalidate the premise that concurrency is a non-issue.
 - Related: ADR-002 (backend framework) will determine the ORM, which sits on top of this decision. ADR-005 (code structure) determines where data-access code lives.

@@ -3,7 +3,8 @@
 The shared vocabulary for Fathom. Use these terms exactly, in code, tests, commits and
 conversation. If a term is missing or ambiguous, raise it rather than inventing a synonym.
 
-Seeded from the README glossary and the Requirements workbook (S1-31). Entries marked
+Seeded from the old README glossary and the Requirements workbook (S1-31); this file is
+now the single source for definitions. Entries marked
 **Open** are unresolved and must not be assumed.
 
 ## Periods
@@ -100,8 +101,8 @@ and never a Reimbursement.
 **Spend**: Outgoing money that counts towards spending totals. Includes purchases,
 External payments, Partner-covered purchases, fees and interest charged, less Refunds.
 Excludes Transfers, Partner transfers and Cover transfer legs, with no toggle to
-include them. Each amount counts at the share of the Account it is attributed to. Reported net of Reimbursements
-by default; gross is an opt-in view.
+include them. Each amount counts at the share of the Account it is attributed to.
+Reported net of Reimbursements by default; gross is an opt-in view.
 
 **Net spend / Gross spend**: Spend after or before linked Reimbursements. Net is the
 default everywhere.
@@ -148,7 +149,7 @@ daily.
 
 ## Infrastructure terms
 
-**Vault**: OCI Vault, the production secrets store. Never an in-app concept.
+**Vault**: AWS Secrets Manager, the production secrets store. Never an in-app concept.
 
 ## Flagged ambiguities
 
@@ -156,3 +157,4 @@ Summary of the **Open** items above, to resolve in grilling sessions:
 
 1. The rule for proposing a Cover's purchase, and whether Up allows a Cover for less
    than the purchase amount (pending S1-14).
+2. The Category and Sub-category taxonomy (pending S1-19).

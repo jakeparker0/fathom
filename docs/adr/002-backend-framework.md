@@ -16,7 +16,7 @@ What this project actually asks of a backend framework:
 - **Scheduled work is first-class.** Daily Up sync (ET-02), daily EOD pricing (SP-08), daily snapshots (SP-11), manual Sync Now (ET-03). The framework only has to host or expose these — the mechanism itself is ADR-006 — but how easily it does so differs.
 - **Analytical read paths.** Pay-cycle window queries, category rollups, trend comparisons, snapshot aggregation. The ORM will be used for writes and simple reads and stepped around for the heavy ones.
 - **Postgres and Alembic** (ADR-004, S1-25). Django brings its own ORM and migration system; the others do not.
-- **Deployment target is one small OCI compute instance.** Single process or a couple of workers. No horizontal scaling story needed.
+- **Deployment target is one small AWS-hosted instance.** Single process or a couple of workers. No horizontal scaling story needed.
 - **Coupled to ADR-003.** Django's value is concentrated in server-rendered templates and admin; FastAPI's is concentrated in a typed JSON API. Choosing one framework narrows the sensible frontend options and vice versa, so these two ADRs should be settled together.
 
 ## Options Considered

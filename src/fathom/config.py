@@ -5,7 +5,7 @@ single typed settings object. Call sites depend only on :func:`get_settings` and
 never read ``os.environ`` directly.
 
 That indirection is the point. In Sprint 6 (PL-13) the source of these values
-moves from a local ``.env`` file to OCI Vault; when it does, the change is
+moves from a local ``.env`` file to AWS Secrets Manager; when it does, the change is
 confined to :meth:`Settings.settings_customise_sources` below and no caller
 changes at all.
 
@@ -150,7 +150,7 @@ class Settings(BaseSettings):
     ) -> Sequence[PydanticBaseSettingsSource]:
         """Resolution order, highest precedence first.
 
-        This is the seam for PL-13. In Sprint 6 an ``OCIVaultSettingsSource``
+        This is the seam for PL-13. In Sprint 6 an ``AwsSecretsManagerSettingsSource``
         is inserted ahead of ``dotenv_settings`` (or in place of it when
         ``ENVIRONMENT=production``) and nothing else in the codebase moves.
         """

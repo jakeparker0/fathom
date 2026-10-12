@@ -17,7 +17,7 @@ The two decisions were made together because the Python version choice was made 
 
 #### Option A: Poetry
 - Pros: Established, mature plugin ecosystem (dynamic versioning, requirements.txt export, etc.), widely adopted.
-- Cons: Slower dependency resolution and installs than uv. Plugin ecosystem largely solves problems relevant to published packages (PyPI distribution, versioning from git tags) which don't apply to a single-user app deployed directly to one OCI instance.
+- Cons: Slower dependency resolution and installs than uv. Plugin ecosystem largely solves problems relevant to published packages (PyPI distribution, versioning from git tags) which don't apply to a single-user app deployed directly to one AWS host.
 
 #### Option B: uv
 - Pros: Significantly faster install/resolution. Single tool also handles Python version installation and pinning natively, removing the need for a separate `pyenv`-style tool. Modern default for new Python projects. `pyproject.toml`-native, standards-compliant.

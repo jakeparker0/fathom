@@ -29,7 +29,9 @@ are defined in `CONTEXT.md`. Use them exactly; don't invent synonyms.
 
 ## Architecture
 
-- Layering follows ADR-005. <!-- Name the layers and the allowed import direction in one line. -->
+- Layering follows ADR-005: `api` → `services` → `repositories`, imports never run upward.
+  `domain/` (pure rules), `schemas/`, `models/`, `core/`, `jobs/` and `providers/` sit
+  beside that stack. Jobs and importers call services.
 - `domain/` is pure: no database, HTTP or framework imports.
 - Read the relevant ADR in `docs/adr/` before changing anything architectural.
   To deviate, propose a new ADR. Don't quietly work around one.

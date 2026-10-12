@@ -7,7 +7,7 @@ Sprint task: S1-09 · Story refs: ET-14, ET-17, ET-19, SA-01 to SA-07, SP-09, BF
 
 ## Context
 
-A web frontend is already settled; the approach is not. The app has exactly one user, on their own machine or a private OCI instance. There is no SEO requirement, no public traffic, no native mobile app and no design system to satisfy.
+A web frontend is already settled; the approach is not. The app has exactly one user, on their own machine or a private AWS instance. There is no SEO requirement, no public traffic, no native mobile app and no design system to satisfy.
 
 Two parts of the app are where the frontend gets genuinely demanding, and they should drive this decision rather than the accounts list in Sprint 1:
 
@@ -72,7 +72,7 @@ TypeScript rather than plain JavaScript, with the client types generated from Fa
 
 - **A second toolchain.** Node, a package manager and a lockfile join the repo. S1-02's one-command setup story grows a frontend half, S1-29's CI pipeline runs a second set of checks (typecheck, lint, build), and S1-30's runbook has to cover both halves from a clean clone.
 - **A generated API client.** The OpenAPI schema becomes a real artifact, not a byproduct: a generation step (`openapi-typescript` or similar) runs as part of the frontend build or as a committed generated file, and regenerating it is part of any change to a response schema. If that step is skipped, the types drift and the main benefit of choosing TypeScript is lost.
-- **One deployment artifact.** Vite builds to static files that FastAPI serves, so Sprint 6 deploys a single process to the OCI instance with no CORS configuration and no second web server. Local development uses Vite's dev proxy to reach the API, which is the only place the two-origin split shows up.
+- **One deployment artifact.** Vite builds to static files that FastAPI serves, so Sprint 6 deploys a single process to the AWS host with no CORS configuration and no second web server. Local development uses Vite's dev proxy to reach the API, which is the only place the two-origin split shows up.
 - **A scope statement for ADR-005.** There are now two trees. ADR-005 governs the backend; the frontend needs either its own stated layout or an explicit note that it is out of scope — otherwise generated components organise themselves.
 - **Duplicated-logic risk to actively manage.** Currency formatting, pay-cycle period boundaries and net-versus-gross rules must not be reimplemented client-side. The rule is that the API returns computed and formatted values where the domain is involved, and the frontend renders them. This belongs in CLAUDE.md (S1-31) and the review checklist (S1-32).
 

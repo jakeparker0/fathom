@@ -21,13 +21,13 @@ Constraints that shape the choice:
 
 - **Idempotent reruns are required, not optional.** Up sync upserts on transaction ID (S1-15 confirms whether those IDs are stable enough to trust); snapshots are keyed by holding and date. Running twice must never duplicate.
 - **Status has to reach the UI.** ET-02 requires a visible last-successful-sync timestamp and surfaced failures. That means job runs are persisted — a `job_run` table with job name, started/finished timestamps, status, row counts and error — regardless of which mechanism runs them. This is a data-model consequence that currently has no home in S1-20 to S1-24.
-- **Two different environments.** Sprint 1 to 5 run locally on a laptop that is closed at night, so daily jobs will miss their window routinely and need catch-up-on-next-start behaviour. Sprint 6 moves everything to a single always-on OCI compute instance, where a plain timer is reliable.
+- **Two different environments.** Sprint 1 to 5 run locally on a laptop that is closed at night, so daily jobs will miss their window routinely and need catch-up-on-next-start behaviour. Sprint 6 moves everything to a single always-on AWS host, where a plain timer is reliable.
 - **Small scale.** One user, a few hundred transactions a month, a handful of ASX codes. Nothing here needs a distributed queue for throughput; it may need one for operational features.
 - **Sprint 6 explicitly includes "move scheduled jobs server-side"**, so whatever is chosen now is allowed to be a local-development answer with a documented migration — but it should be a deliberate one.
 
 ## Options Considered
 
-### Option A: OS cron (local) / systemd timers (OCI), invoking a CLI entry point
+### Option A: OS cron (local) / systemd timers (AWS), invoking a CLI entry point
 - Pros:
   - Simplest possible mechanism; the app just needs `python -m fathom.jobs.daily_sync` to be runnable and idempotent, which is good design regardless of the option chosen.
   - Scheduling lives outside the app, so a crashed or restarted app cannot take the schedule down with it.
@@ -44,7 +44,7 @@ Constraints that shape the choice:
   - Schedule is defined in Python, in the repo, versioned with the code and visible to anyone reading it.
   - No extra services or infrastructure; starts and stops with the app, so one process is the whole system.
   - Supports a Postgres job store, so missed runs can be caught up and schedules survive restarts — which directly addresses the closed-laptop problem.
-  - Same mechanism works locally and on OCI; Sprint 6 becomes a deployment change, not a rearchitecture.
+  - Same mechanism works locally and on AWS; Sprint 6 becomes a deployment change, not a rearchitecture.
 - Cons:
   - Jobs run in the app process: a long SP-12 backfill competes with request handling, and an unhandled error in a job can affect the app.
   - Needs care if the app ever runs more than one worker — two workers means two schedulers and two syncs unless a lock or a dedicated scheduler process is used.
@@ -58,18 +58,18 @@ Constraints that shape the choice:
   - Flower or similar gives a ready-made view of run history and failures.
   - Widely used and genuinely worth learning if the goal includes production-shaped patterns.
 - Cons:
-  - Adds Redis (or RabbitMQ) plus at least two extra processes to run, in both docker-compose and on a small free-tier OCI instance where resources are scarce.
+  - Adds Redis (or RabbitMQ) plus at least two extra processes to run, in both docker-compose and on a small AWS instance where resources are scarce.
   - Operational complexity far beyond four daily jobs for one user — by some distance the heaviest option here.
   - More moving parts to keep running before any feature work happens, and more surface area for an unfamiliar failure to eat an evening.
   - Local development becomes "three things must be running", which works against the clean-clone story in S1-30.
 
 ## Decision
 
-**Option A — OS-level scheduling (cron locally, systemd timers on OCI) invoking CLI entry points**, with a review at Sprint 6 to decide whether to move to APScheduler.
+**Option A — OS-level scheduling (cron locally, systemd timers on AWS) invoking CLI entry points**, with a review at Sprint 6 to decide whether to move to APScheduler.
 
 Two things decided it. It is the least to build now, and Sprint 1 is already the long pole — there is no dependency to add, no scheduler semantics to learn and nothing to configure beyond a crontab line, which keeps attention on the domain problems that are the actual point of the project. More importantly, it forces the job design that every other option would also want: each job becomes a plain, idempotent, independently runnable entry point (`python -m fathom.jobs.daily_sync`) with no scheduler-specific code inside it. That property is what makes the later move cheap.
 
-This is explicitly a first choice, not a final one. APScheduler stays the named successor, and the decision is revisited at the Sprint 6 deployment review — at which point an always-on OCI instance may well make a systemd timer entirely sufficient, and "stay on timers" is a legitimate outcome of that review.
+This is explicitly a first choice, not a final one. APScheduler stays the named successor, and the decision is revisited at the Sprint 6 deployment review — at which point an always-on AWS instance may well make a systemd timer entirely sufficient, and "stay on timers" is a legitimate outcome of that review.
 
 ## Consequences
 
@@ -101,6 +101,6 @@ This is explicitly a first choice, not a final one. APScheduler stays the named 
 
 - Recorded in `CLAUDE.md` (S1-31): jobs are idempotent CLI entry points calling services, with no scheduler-specific code, so generated code does not invent a second scheduling approach alongside this one.
 - **Named review point:** the Sprint 6 deployment task. Decide then between a systemd timer and APScheduler with a Postgres job store. Secondary triggers that would bring the review forward: the catch-up and locking logic starting to look like a scheduler in its own right, or SP-12 backfills running long enough to want out-of-process execution.
-- Celery was rejected as far too heavy — Redis plus two extra processes on a free-tier OCI instance, for four daily jobs and one user, and a clean-clone story that becomes "three things must be running".
+- Celery was rejected as far too heavy — Redis plus two extra processes on a small AWS instance, for four daily jobs and one user, and a clean-clone story that becomes "three things must be running".
 - A Postgres-backed queue (`procrastinate`, `arq`) remains the interesting middle ground if job infrastructure is ever genuinely wanted: Celery-style retries, run history and out-of-process workers using the database already in the stack, with no broker to run. Worth reconsidering at the same Sprint 6 review.
 - Depends on: S1-07, ADR-002 (entry points are plain Python modules, since FastAPI provides no scheduler), ADR-005 (jobs call services). Feeds: S1-20 to S1-25 (`job_run` table and advisory lock), S1-30 (runbook), S1-31 (CLAUDE.md), Sprint 2 sync work, Sprint 4 pricing and snapshots, Sprint 6 server-side jobs.
