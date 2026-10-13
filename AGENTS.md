@@ -92,3 +92,7 @@ The five canonical triage roles, using their default names (`needs-triage`, `nee
 ### Domain docs
 
 Single-context: one `CONTEXT.md` at the repo root plus ADRs in `docs/adr/`. See `docs/agents/domain.md`.
+
+## Specs and tickets
+
+Lifecycle (draft vs committed) is defined in `docs/agents/issue-tracker.md`. New spec and ticket output goes in `.scratch/_drafts/`. Never promote it yourself.
