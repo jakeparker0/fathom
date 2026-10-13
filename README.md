@@ -17,7 +17,7 @@ Done so far:
 - Repo, `uv` dependency management, Python 3.12, ruff and pre-commit
 - Local Postgres 18 in Docker Compose, with a connection check script
 - Typed settings object and `.env` template, with tests
-- Architecture decisions ADR-001 to ADR-006, ADR-008 and ADR-009
+- Architecture decisions ADR-001 to ADR-006 and ADR-008 to ADR-010
 - Domain glossary (`CONTEXT.md`), agent instructions (`AGENTS.md`) and review checklist
 - Real Up API sample responses under `tests/fixtures/up/` (a few are still empty)
 
@@ -130,6 +130,12 @@ An Up Bank personal access token is required and can be generated at [api.up.com
 
 Before committing, run `uv run ruff check --fix` and `uv run ruff format`. The pre-commit hooks run both.
 
+### Running tests
+
+Tests that use the database need Postgres up (`docker compose up -d`), then `uv run pytest`.
+
+Database tests use a separate `<POSTGRES_DB>_test` database on the same Postgres, dropped and recreated at the start of each run. Each test runs in a transaction that is rolled back, so even a `commit()` leaves nothing behind. The provisioning helper asserts the name ends in `_test` before any `DROP` or `CREATE`. Tests that do not use the database run without Postgres. See [ADR-010](docs/adr/010-test-database-isolation.md).
+
 ---
 
 ## Repository layout
@@ -143,6 +149,8 @@ docs/
   adr/            architecture decision records
   agents/         agent workflow docs and the code review checklist
   requirements/   user stories and acceptance criteria (not yet moved in)
+.scratch/
+  _drafts/
 CONTEXT.md        domain glossary
 AGENTS.md         instructions for AI coding agents
 CLAUDE.md         Claude Code rules, imports AGENTS.md

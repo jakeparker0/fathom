@@ -5,6 +5,7 @@ description = "Personal finance management app"
 requires-python = ">=3.12"
 dependencies = [
     "pydantic-settings>=2.6",
+    "sqlalchemy>=2.1.4",
 ]
 
 
@@ -46,6 +47,7 @@ ignore = [
     "TD002",
     "TD003",
     "FIX002",
+    "CPY001"
 ]
 
 [tool.ruff.lint.per-file-ignores]
