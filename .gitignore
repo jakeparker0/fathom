@@ -68,3 +68,5 @@ data/recon/*
 
 .claude/settings.local.json
 CLAUDE.local.md
+
+.scratch/_drafts
