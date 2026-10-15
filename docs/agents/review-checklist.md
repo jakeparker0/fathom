@@ -18,9 +18,8 @@ Ruff and pre-commit own formatting, import order and lint. Review what they cann
 ## Scope
 
 - [ ] The diff does what the ticket asks and nothing else.
-- [ ] Hand-written areas hold no generated implementation: the transaction relationship
-      model (Transfers, Covers, Splits, Reimbursements), the data model and schema, and
-      balance forecasting. Tests and review comments for them are fine. (`AGENTS.md`)
+- [ ] Tier A paths (`.claude/hand-write-paths.txt`) hold no generated implementation.
+      Tests and review comments for them are fine. (ADR-011)
 - [ ] An architectural change comes with a new or amended ADR. A diff that works around
       an ADR fails. (`docs/adr/`)
 
@@ -109,3 +108,8 @@ Ruff and pre-commit own formatting, import order and lint. Review what they cann
 
 - [ ] Every commit message carries the task or story ID.
 - [ ] Pre-commit passed without `--no-verify`.
+
+## Before merge (Jake, not the review agent)
+
+- [ ] Tier B (`Mode: design-led`): I explained the diff to the agent without looking at
+      it, and the agent found no gaps. Anything I got wrong blocks the merge. (ADR-011)

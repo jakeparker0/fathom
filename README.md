@@ -212,7 +212,17 @@ Deliberately excluded from v1 and tracked in the requirements parking lot rather
 
 Requirements are captured as 56 user stories across five epics, with acceptance criteria and priorities. Code references stories by ID (`ET-12`, `SP-11`, `SA-01`) and sprint tasks by `S1-XX` in commits and comments so implementation can be traced back to intent. The stories are being moved into `docs/requirements/`.
 
-Development is AI-assisted, with a deliberate split between what is hand-written and what is generated. The forecasting work, the transaction relationship model, and the data model are written by hand as learning exercises and because they carry the most risk. CRUD, forms, CSV parsing, boilerplate, and tests are generated and reviewed. [`AGENTS.md`](AGENTS.md) holds the project rules that agents read, [`CONTEXT.md`](CONTEXT.md) the vocabulary, and [`docs/agents/review-checklist.md`](docs/agents/review-checklist.md) what generated code must satisfy before it is accepted.
+Development is AI-assisted, with a deliberate split between what is hand-written and what is generated ([ADR-011](docs/adr/011-human-ai-split.md)). [`AGENTS.md`](AGENTS.md) holds the project rules that agents read, [`CONTEXT.md`](CONTEXT.md) the vocabulary, and [`docs/agents/review-checklist.md`](docs/agents/review-checklist.md) what generated code must satisfy before it is accepted.
+
+### Hand-written vs AI-built
+
+- **Hand-written:** the data model and schema, the transaction relationship model (Transfers, Covers, Splits, Reimbursements), Up sync and idempotency, and balance forecasting. A Claude Code hook stops the agent editing these paths.
+- **Designed by me, built by the agent:** the error model, the CI pipeline, AWS deployment, the Up API client.
+- **Agent-built and reviewed:** the frontend, CRUD, CSV parsing, test setup, boilerplate and doc drafts.
+
+**Moved out of hand-written**, with the reason:
+
+- S1-06, test database isolation ([ADR-010](docs/adr/010-test-database-isolation.md)): designed from the agent's recommendations during grilling and built by the agent. This happened before ADR-011 and is why the answer-first grilling rule exists.
 
 Architectural change goes through a new ADR, starting from [`docs/adr/000-template.md`](docs/adr/000-template.md). Don't work around an accepted one.
 

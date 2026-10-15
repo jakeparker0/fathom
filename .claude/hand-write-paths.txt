@@ -1,0 +1,19 @@
+# Tier A: hand-written code (ADR-011). The guard hook blocks agent edits to these paths.
+# One glob per line, relative to the repo root. `*` also matches `/`.
+# Keep in sync with the Tier A list in AGENTS.md.
+
+# Data model and schema (S1-20, S1-22 to S1-25)
+src/fathom/models/*
+migrations/*
+alembic/*
+
+# Transaction relationship model: Transfers, Covers, Splits, Reimbursements (S1-21)
+src/fathom/domain/relationships*
+src/fathom/services/relationships*
+
+# Sync and idempotency: fetch orchestration, dedupe, advisory lock (S1-27, Sprint 2)
+src/fathom/services/sync*
+src/fathom/jobs/sync*
+
+# Balance forecasting (post-v1)
+src/fathom/*forecast*

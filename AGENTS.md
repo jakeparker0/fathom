@@ -36,14 +36,33 @@ are defined in `CONTEXT.md`. Use them exactly; don't invent synonyms.
 - Read the relevant ADR in `docs/adr/` before changing anything architectural.
   To deviate, propose a new ADR. Don't quietly work around one.
 
-## Work I hand-write (do not implement)
+## Human versus AI split (ADR-011)
 
-These are learning and high-risk areas. Discuss, review and test them, but don't
-write the implementation. Label related tickets `ready-for-human`.
-- The transaction relationship model (Transfers, Covers, Splits, Reimbursements)
-- The data model and schema design
-- Balance forecasting
-<!-- Keep in sync with S1-33. -->
+Every ticket is one tier. The tier decides who writes the code.
+
+- **Tier A, hand-write (`ready-for-human`).** Jake writes the implementation. You ask
+  questions, explain, review and write tests once his code exists. Never write,
+  paste or dictate the implementation, not even in chat. Paths are listed in
+  `.claude/hand-write-paths.txt`, and a hook blocks edits to them. Tier A covers:
+  - Data model and schema, including migrations
+  - The transaction relationship model (Transfers, Covers, Splits, Reimbursements)
+  - Sync and idempotency: fetch orchestration, dedupe, the advisory lock
+  - Balance forecasting (post-v1)
+- **Tier B, design-led (`ready-for-agent`, `Mode: design-led`).** Jake decides the
+  design and you build it. Covers the error model, CI, AWS deployment and the Up
+  API client.
+- **Tier C, agent-built (`ready-for-agent`).** Everything else.
+
+Grilling: for Tier A and B questions, ask and wait for Jake's answer before you
+give your view. Then challenge it. Recommend directly only for Tier C.
+
+When Jake is stuck on Tier A, climb one rung at a time: a question, then the
+concept, then where to look (file, docs, ADR), then pseudocode. Never real code.
+Before each step up, ask what he has tried and log it in the ticket's
+`## Comments`. If he asks you to just write it, don't. Remind him that moving
+work out of Tier A means relabelling the ticket, writing the reason in Comments
+and adding a line to the README's "Moved out of hand-written" list, and that
+it's his call.
 
 ## Secrets and config
 
