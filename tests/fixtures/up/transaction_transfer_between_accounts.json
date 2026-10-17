@@ -1,0 +1,138 @@
+{
+  "data": [
+    {
+      "type": "transactions",
+      "id": "5f4bc51b-04f6-4cbc-bb4c-99735cef437e",
+      "attributes": {
+        "status": "SETTLED",
+        "rawText": null,
+        "description": "Forward from Spending",
+        "message": null,
+        "isCategorizable": false,
+        "holdInfo": null,
+        "roundUp": null,
+        "cashback": null,
+        "amount": {
+          "currencyCode": "AUD",
+          "value": "38.26",
+          "valueInBaseUnits": 3826
+        },
+        "foreignAmount": null,
+        "cardPurchaseMethod": null,
+        "settledAt": "2026-09-20T15:29:22+10:00",
+        "createdAt": "2026-09-20T15:29:22+10:00",
+        "transactionType": "Transfer",
+        "note": null,
+        "performingCustomer": {
+          "displayName": "$userd89ea6"
+        },
+        "deepLinkURL": "up://transaction/VHJhbnNhY3Rpb24tMzYwNjM2NTA4OQ=="
+      },
+      "relationships": {
+        "account": {
+          "data": {
+            "type": "accounts",
+            "id": "96235861-e3dc-4767-a3a0-4571143df086"
+          },
+          "links": {
+            "related": "https://api.up.com.au/api/v1/accounts/96235861-e3dc-4767-a3a0-4571143df086"
+          }
+        },
+        "transferAccount": {
+          "data": {
+            "type": "accounts",
+            "id": "598f7c49-4161-4c38-b941-345593c41396"
+          },
+          "links": {
+            "related": "https://api.up.com.au/api/v1/accounts/598f7c49-4161-4c38-b941-345593c41396"
+          }
+        },
+        "category": {
+          "data": null
+        },
+        "parentCategory": {
+          "data": null
+        },
+        "tags": {
+          "data": [],
+          "links": {
+            "self": "https://api.up.com.au/api/v1/transactions/5f4bc51b-04f6-4cbc-bb4c-99735cef437e/relationships/tags"
+          }
+        },
+        "attachment": {
+          "data": null
+        }
+      },
+      "links": {
+        "self": "https://api.up.com.au/api/v1/transactions/5f4bc51b-04f6-4cbc-bb4c-99735cef437e"
+      }
+    },
+    {
+      "type": "transactions",
+      "id": "6bbdac31-010d-472d-8c73-d67e996310d0",
+      "attributes": {
+        "status": "SETTLED",
+        "rawText": null,
+        "description": "Forward to Account 0744",
+        "message": null,
+        "isCategorizable": false,
+        "holdInfo": null,
+        "roundUp": null,
+        "cashback": null,
+        "amount": {
+          "currencyCode": "AUD",
+          "value": "-38.26",
+          "valueInBaseUnits": -3826
+        },
+        "foreignAmount": null,
+        "cardPurchaseMethod": null,
+        "settledAt": "2026-09-20T15:29:22+10:00",
+        "createdAt": "2026-09-20T15:29:22+10:00",
+        "transactionType": "Transfer",
+        "note": null,
+        "performingCustomer": {
+          "displayName": "$userd89ea6"
+        },
+        "deepLinkURL": "up://transaction/VHJhbnNhY3Rpb24tODcwOTEyOTgyMA=="
+      },
+      "relationships": {
+        "account": {
+          "data": {
+            "type": "accounts",
+            "id": "598f7c49-4161-4c38-b941-345593c41396"
+          },
+          "links": {
+            "related": "https://api.up.com.au/api/v1/accounts/598f7c49-4161-4c38-b941-345593c41396"
+          }
+        },
+        "transferAccount": {
+          "data": {
+            "type": "accounts",
+            "id": "96235861-e3dc-4767-a3a0-4571143df086"
+          },
+          "links": {
+            "related": "https://api.up.com.au/api/v1/accounts/96235861-e3dc-4767-a3a0-4571143df086"
+          }
+        },
+        "category": {
+          "data": null
+        },
+        "parentCategory": {
+          "data": null
+        },
+        "tags": {
+          "data": [],
+          "links": {
+            "self": "https://api.up.com.au/api/v1/transactions/6bbdac31-010d-472d-8c73-d67e996310d0/relationships/tags"
+          }
+        },
+        "attachment": {
+          "data": null
+        }
+      },
+      "links": {
+        "self": "https://api.up.com.au/api/v1/transactions/6bbdac31-010d-472d-8c73-d67e996310d0"
+      }
+    }
+  ]
+}

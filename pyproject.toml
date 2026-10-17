@@ -23,7 +23,7 @@ dev = [
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-pythonpath = ["src"]
+pythonpath = ["src", "scripts"]
 
 [build-system]
 requires = ["hatchling"]
@@ -51,6 +51,9 @@ ignore = [
 ]
 
 [tool.ruff.lint.per-file-ignores]
+"scripts/*.py" = [
+    "INP001",   # scripts are run directly, not imported as a package
+]
 "tests/**/*.py" = [
     "S101",     # assert is the point of a test
     "PLR2004",  # magic values are fine in assertions

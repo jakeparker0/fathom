@@ -1,0 +1,25 @@
+{
+  "type": "accounts",
+  "id": "96235861-e3dc-4767-a3a0-4571143df086",
+  "attributes": {
+    "displayName": "Account 5cc7",
+    "accountType": "SAVER",
+    "ownershipType": "INDIVIDUAL",
+    "balance": {
+      "currencyCode": "AUD",
+      "value": "6066.45",
+      "valueInBaseUnits": 606645
+    },
+    "createdAt": "2024-04-16T19:44:04+10:00"
+  },
+  "relationships": {
+    "transactions": {
+      "links": {
+        "related": "https://api.up.com.au/api/v1/accounts/96235861-e3dc-4767-a3a0-4571143df086/transactions"
+      }
+    }
+  },
+  "links": {
+    "self": "https://api.up.com.au/api/v1/accounts/96235861-e3dc-4767-a3a0-4571143df086"
+  }
+}

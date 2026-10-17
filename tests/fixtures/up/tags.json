@@ -1,0 +1,30 @@
+{
+  "data": [
+    {
+      "type": "tags",
+      "id": "tag-637fd2",
+      "relationships": {
+        "transactions": {
+          "links": {
+            "related": "https://api.up.com.au/api/v1/transactions?filter%5Btag%5D=tag-637fd2"
+          }
+        }
+      }
+    },
+    {
+      "type": "tags",
+      "id": "tag-03052e",
+      "relationships": {
+        "transactions": {
+          "links": {
+            "related": "https://api.up.com.au/api/v1/transactions?filter%5Btag%5D=tag-03052e"
+          }
+        }
+      }
+    }
+  ],
+  "links": {
+    "prev": null,
+    "next": null
+  }
+}

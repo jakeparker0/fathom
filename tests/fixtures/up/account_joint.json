@@ -1,0 +1,25 @@
+{
+  "type": "accounts",
+  "id": "f384d2b4-ace4-422c-a238-ebc3fe523f68",
+  "attributes": {
+    "displayName": "Account 0c37",
+    "accountType": "TRANSACTIONAL",
+    "ownershipType": "JOINT",
+    "balance": {
+      "currencyCode": "AUD",
+      "value": "11.06",
+      "valueInBaseUnits": 1106
+    },
+    "createdAt": "2024-10-05T13:27:14+10:00"
+  },
+  "relationships": {
+    "transactions": {
+      "links": {
+        "related": "https://api.up.com.au/api/v1/accounts/f384d2b4-ace4-422c-a238-ebc3fe523f68/transactions"
+      }
+    }
+  },
+  "links": {
+    "self": "https://api.up.com.au/api/v1/accounts/f384d2b4-ace4-422c-a238-ebc3fe523f68"
+  }
+}

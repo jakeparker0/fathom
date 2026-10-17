@@ -1,0 +1,25 @@
+{
+  "type": "accounts",
+  "id": "fb5ac64b-ce79-4308-8c17-a5ea44815059",
+  "attributes": {
+    "displayName": "Account 4a42",
+    "accountType": "SAVER",
+    "ownershipType": "JOINT",
+    "balance": {
+      "currencyCode": "AUD",
+      "value": "6.51",
+      "valueInBaseUnits": 651
+    },
+    "createdAt": "2025-03-11T08:24:05+11:00"
+  },
+  "relationships": {
+    "transactions": {
+      "links": {
+        "related": "https://api.up.com.au/api/v1/accounts/fb5ac64b-ce79-4308-8c17-a5ea44815059/transactions"
+      }
+    }
+  },
+  "links": {
+    "self": "https://api.up.com.au/api/v1/accounts/fb5ac64b-ce79-4308-8c17-a5ea44815059"
+  }
+}

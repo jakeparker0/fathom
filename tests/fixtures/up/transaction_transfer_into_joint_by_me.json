@@ -1,0 +1,136 @@
+[
+  {
+    "type": "transactions",
+    "id": "e3f881fe-7fe3-4fd3-b970-714ac431367e",
+    "attributes": {
+      "status": "SETTLED",
+      "rawText": null,
+      "description": "Transfer from $userd89ea6",
+      "message": "",
+      "isCategorizable": false,
+      "holdInfo": null,
+      "roundUp": null,
+      "cashback": null,
+      "amount": {
+        "currencyCode": "AUD",
+        "value": "646.00",
+        "valueInBaseUnits": 64600
+      },
+      "foreignAmount": null,
+      "cardPurchaseMethod": null,
+      "settledAt": "2026-09-18T18:54:27+10:00",
+      "createdAt": "2026-09-18T18:54:27+10:00",
+      "transactionType": "Transfer",
+      "note": null,
+      "performingCustomer": {
+        "displayName": "$userd89ea6"
+      },
+      "deepLinkURL": "up://transaction/VHJhbnNhY3Rpb24tMTAxNjMyMTQ1OA=="
+    },
+    "relationships": {
+      "account": {
+        "data": {
+          "type": "accounts",
+          "id": "f384d2b4-ace4-422c-a238-ebc3fe523f68"
+        },
+        "links": {
+          "related": "https://api.up.com.au/api/v1/accounts/f384d2b4-ace4-422c-a238-ebc3fe523f68"
+        }
+      },
+      "transferAccount": {
+        "data": {
+          "type": "accounts",
+          "id": "598f7c49-4161-4c38-b941-345593c41396"
+        },
+        "links": {
+          "related": "https://api.up.com.au/api/v1/accounts/598f7c49-4161-4c38-b941-345593c41396"
+        }
+      },
+      "category": {
+        "data": null
+      },
+      "parentCategory": {
+        "data": null
+      },
+      "tags": {
+        "data": [],
+        "links": {
+          "self": "https://api.up.com.au/api/v1/transactions/e3f881fe-7fe3-4fd3-b970-714ac431367e/relationships/tags"
+        }
+      },
+      "attachment": {
+        "data": null
+      }
+    },
+    "links": {
+      "self": "https://api.up.com.au/api/v1/transactions/e3f881fe-7fe3-4fd3-b970-714ac431367e"
+    }
+  },
+  {
+    "type": "transactions",
+    "id": "4885b885-aeea-4a8f-ad0c-721313af0b66",
+    "attributes": {
+      "status": "SETTLED",
+      "rawText": null,
+      "description": "Transfer to Account 0c37",
+      "message": "",
+      "isCategorizable": false,
+      "holdInfo": null,
+      "roundUp": null,
+      "cashback": null,
+      "amount": {
+        "currencyCode": "AUD",
+        "value": "-646.00",
+        "valueInBaseUnits": -64600
+      },
+      "foreignAmount": null,
+      "cardPurchaseMethod": null,
+      "settledAt": "2026-09-18T18:54:26+10:00",
+      "createdAt": "2026-09-18T18:54:26+10:00",
+      "transactionType": "Transfer",
+      "note": null,
+      "performingCustomer": {
+        "displayName": "$userd89ea6"
+      },
+      "deepLinkURL": "up://transaction/VHJhbnNhY3Rpb24tODI0Mjc1MzI5OA=="
+    },
+    "relationships": {
+      "account": {
+        "data": {
+          "type": "accounts",
+          "id": "598f7c49-4161-4c38-b941-345593c41396"
+        },
+        "links": {
+          "related": "https://api.up.com.au/api/v1/accounts/598f7c49-4161-4c38-b941-345593c41396"
+        }
+      },
+      "transferAccount": {
+        "data": {
+          "type": "accounts",
+          "id": "f384d2b4-ace4-422c-a238-ebc3fe523f68"
+        },
+        "links": {
+          "related": "https://api.up.com.au/api/v1/accounts/f384d2b4-ace4-422c-a238-ebc3fe523f68"
+        }
+      },
+      "category": {
+        "data": null
+      },
+      "parentCategory": {
+        "data": null
+      },
+      "tags": {
+        "data": [],
+        "links": {
+          "self": "https://api.up.com.au/api/v1/transactions/4885b885-aeea-4a8f-ad0c-721313af0b66/relationships/tags"
+        }
+      },
+      "attachment": {
+        "data": null
+      }
+    },
+    "links": {
+      "self": "https://api.up.com.au/api/v1/transactions/4885b885-aeea-4a8f-ad0c-721313af0b66"
+    }
+  }
+]

@@ -1,0 +1,66 @@
+{
+  "data": {
+    "type": "transactions",
+    "id": "866ea9cd-c413-4b88-97ab-c96844612cb6",
+    "attributes": {
+      "status": "SETTLED",
+      "rawText": "Masked rawText",
+      "description": "Masked description",
+      "message": "Masked message",
+      "isCategorizable": true,
+      "holdInfo": null,
+      "roundUp": null,
+      "cashback": null,
+      "amount": {
+        "currencyCode": "AUD",
+        "value": "38.26",
+        "valueInBaseUnits": 3826
+      },
+      "foreignAmount": null,
+      "cardPurchaseMethod": null,
+      "settledAt": "2026-09-20T15:09:07+10:00",
+      "createdAt": "2026-09-20T15:09:07+10:00",
+      "transactionType": "Osko Payment Received",
+      "note": null,
+      "performingCustomer": {
+        "displayName": "$userd89ea6"
+      },
+      "deepLinkURL": "up://transaction/VHJhbnNhY3Rpb24tMTg3MzM5MjM2Mg=="
+    },
+    "relationships": {
+      "account": {
+        "data": {
+          "type": "accounts",
+          "id": "598f7c49-4161-4c38-b941-345593c41396"
+        },
+        "links": {
+          "related": "https://api.up.com.au/api/v1/accounts/598f7c49-4161-4c38-b941-345593c41396"
+        }
+      },
+      "transferAccount": {
+        "data": null
+      },
+      "category": {
+        "data": null,
+        "links": {
+          "self": "https://api.up.com.au/api/v1/transactions/866ea9cd-c413-4b88-97ab-c96844612cb6/relationships/category"
+        }
+      },
+      "parentCategory": {
+        "data": null
+      },
+      "tags": {
+        "data": [],
+        "links": {
+          "self": "https://api.up.com.au/api/v1/transactions/866ea9cd-c413-4b88-97ab-c96844612cb6/relationships/tags"
+        }
+      },
+      "attachment": {
+        "data": null
+      }
+    },
+    "links": {
+      "self": "https://api.up.com.au/api/v1/transactions/866ea9cd-c413-4b88-97ab-c96844612cb6"
+    }
+  }
+}

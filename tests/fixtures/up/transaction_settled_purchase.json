@@ -1,0 +1,84 @@
+{
+  "type": "transactions",
+  "id": "90139cbd-76ca-42d7-84cf-7f6b83dfcca7",
+  "attributes": {
+    "status": "SETTLED",
+    "rawText": "Masked rawText",
+    "description": "Good Heavens",
+    "message": null,
+    "isCategorizable": true,
+    "holdInfo": {
+      "amount": {
+        "currencyCode": "AUD",
+        "value": "-47.37",
+        "valueInBaseUnits": -4737
+      },
+      "foreignAmount": null
+    },
+    "roundUp": null,
+    "cashback": null,
+    "amount": {
+      "currencyCode": "AUD",
+      "value": "-47.37",
+      "valueInBaseUnits": -4737
+    },
+    "foreignAmount": null,
+    "cardPurchaseMethod": {
+      "method": "CONTACTLESS",
+      "cardNumberSuffix": "3185"
+    },
+    "settledAt": "2026-09-19T03:50:33+10:00",
+    "createdAt": "2026-09-18T18:55:07+10:00",
+    "transactionType": "Purchase",
+    "note": null,
+    "performingCustomer": {
+      "displayName": "$userd89ea6"
+    },
+    "deepLinkURL": "up://transaction/VHJhbnNhY3Rpb24tNDYxNjc0MTA4OA=="
+  },
+  "relationships": {
+    "account": {
+      "data": {
+        "type": "accounts",
+        "id": "598f7c49-4161-4c38-b941-345593c41396"
+      },
+      "links": {
+        "related": "https://api.up.com.au/api/v1/accounts/598f7c49-4161-4c38-b941-345593c41396"
+      }
+    },
+    "transferAccount": {
+      "data": null
+    },
+    "category": {
+      "data": {
+        "type": "categories",
+        "id": "pubs-and-bars"
+      },
+      "links": {
+        "self": "https://api.up.com.au/api/v1/transactions/90139cbd-76ca-42d7-84cf-7f6b83dfcca7/relationships/category",
+        "related": "https://api.up.com.au/api/v1/categories/pubs-and-bars"
+      }
+    },
+    "parentCategory": {
+      "data": {
+        "type": "categories",
+        "id": "good-life"
+      },
+      "links": {
+        "related": "https://api.up.com.au/api/v1/categories/good-life"
+      }
+    },
+    "tags": {
+      "data": [],
+      "links": {
+        "self": "https://api.up.com.au/api/v1/transactions/90139cbd-76ca-42d7-84cf-7f6b83dfcca7/relationships/tags"
+      }
+    },
+    "attachment": {
+      "data": null
+    }
+  },
+  "links": {
+    "self": "https://api.up.com.au/api/v1/transactions/90139cbd-76ca-42d7-84cf-7f6b83dfcca7"
+  }
+}

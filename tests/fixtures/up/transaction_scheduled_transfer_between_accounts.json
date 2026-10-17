@@ -1,0 +1,132 @@
+[
+  {
+    "type": "transactions",
+    "id": "45d6c7d1-c429-43f3-a829-e55011ef5abd",
+    "attributes": {
+      "status": "SETTLED",
+      "rawText": null,
+      "description": "Auto Transfer from Account 0744",
+      "message": null,
+      "isCategorizable": false,
+      "holdInfo": null,
+      "roundUp": null,
+      "cashback": null,
+      "amount": {
+        "currencyCode": "AUD",
+        "value": "979.00",
+        "valueInBaseUnits": 97900
+      },
+      "foreignAmount": null,
+      "cardPurchaseMethod": null,
+      "settledAt": "2026-09-16T08:00:10+10:00",
+      "createdAt": "2026-09-16T08:00:10+10:00",
+      "transactionType": "Scheduled Transfer",
+      "note": null,
+      "performingCustomer": null,
+      "deepLinkURL": "up://transaction/VHJhbnNhY3Rpb24tNjkwMzg5NjQ4OA=="
+    },
+    "relationships": {
+      "account": {
+        "data": {
+          "type": "accounts",
+          "id": "598f7c49-4161-4c38-b941-345593c41396"
+        },
+        "links": {
+          "related": "https://api.up.com.au/api/v1/accounts/598f7c49-4161-4c38-b941-345593c41396"
+        }
+      },
+      "transferAccount": {
+        "data": {
+          "type": "accounts",
+          "id": "96235861-e3dc-4767-a3a0-4571143df086"
+        },
+        "links": {
+          "related": "https://api.up.com.au/api/v1/accounts/96235861-e3dc-4767-a3a0-4571143df086"
+        }
+      },
+      "category": {
+        "data": null
+      },
+      "parentCategory": {
+        "data": null
+      },
+      "tags": {
+        "data": [],
+        "links": {
+          "self": "https://api.up.com.au/api/v1/transactions/45d6c7d1-c429-43f3-a829-e55011ef5abd/relationships/tags"
+        }
+      },
+      "attachment": {
+        "data": null
+      }
+    },
+    "links": {
+      "self": "https://api.up.com.au/api/v1/transactions/45d6c7d1-c429-43f3-a829-e55011ef5abd"
+    }
+  },
+  {
+    "type": "transactions",
+    "id": "97f2bedc-7a5f-4586-91ef-c068b3e10cb1",
+    "attributes": {
+      "status": "SETTLED",
+      "rawText": null,
+      "description": "Auto Transfer to Spending",
+      "message": null,
+      "isCategorizable": false,
+      "holdInfo": null,
+      "roundUp": null,
+      "cashback": null,
+      "amount": {
+        "currencyCode": "AUD",
+        "value": "-979.00",
+        "valueInBaseUnits": -97900
+      },
+      "foreignAmount": null,
+      "cardPurchaseMethod": null,
+      "settledAt": "2026-09-16T08:00:10+10:00",
+      "createdAt": "2026-09-16T08:00:10+10:00",
+      "transactionType": "Scheduled Transfer",
+      "note": null,
+      "performingCustomer": null,
+      "deepLinkURL": "up://transaction/VHJhbnNhY3Rpb24tNjkxNjE4MDc1NA=="
+    },
+    "relationships": {
+      "account": {
+        "data": {
+          "type": "accounts",
+          "id": "96235861-e3dc-4767-a3a0-4571143df086"
+        },
+        "links": {
+          "related": "https://api.up.com.au/api/v1/accounts/96235861-e3dc-4767-a3a0-4571143df086"
+        }
+      },
+      "transferAccount": {
+        "data": {
+          "type": "accounts",
+          "id": "598f7c49-4161-4c38-b941-345593c41396"
+        },
+        "links": {
+          "related": "https://api.up.com.au/api/v1/accounts/598f7c49-4161-4c38-b941-345593c41396"
+        }
+      },
+      "category": {
+        "data": null
+      },
+      "parentCategory": {
+        "data": null
+      },
+      "tags": {
+        "data": [],
+        "links": {
+          "self": "https://api.up.com.au/api/v1/transactions/97f2bedc-7a5f-4586-91ef-c068b3e10cb1/relationships/tags"
+        }
+      },
+      "attachment": {
+        "data": null
+      }
+    },
+    "links": {
+      "self": "https://api.up.com.au/api/v1/transactions/97f2bedc-7a5f-4586-91ef-c068b3e10cb1"
+    }
+  }
+]

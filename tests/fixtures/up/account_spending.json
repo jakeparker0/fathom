@@ -1,0 +1,25 @@
+{
+  "type": "accounts",
+  "id": "598f7c49-4161-4c38-b941-345593c41396",
+  "attributes": {
+    "displayName": "Spending",
+    "accountType": "TRANSACTIONAL",
+    "ownershipType": "INDIVIDUAL",
+    "balance": {
+      "currencyCode": "AUD",
+      "value": "384.24",
+      "valueInBaseUnits": 38424
+    },
+    "createdAt": "2024-04-06T16:51:51+11:00"
+  },
+  "relationships": {
+    "transactions": {
+      "links": {
+        "related": "https://api.up.com.au/api/v1/accounts/598f7c49-4161-4c38-b941-345593c41396/transactions"
+      }
+    }
+  },
+  "links": {
+    "self": "https://api.up.com.au/api/v1/accounts/598f7c49-4161-4c38-b941-345593c41396"
+  }
+}
