@@ -81,8 +81,14 @@ shows under the funding Account in every view, keeps the purchase's category,
 merchant and Tags, and stays on the purchase's date. Until the user confirms, the
 purchase counts at its own Account's share. A Cover is always the whole purchase and
 always Up-labelled: a manual Transfer made for the same reason stays a Transfer.
-_Open_: the rule for proposing the purchase. Pending S1-14 and a real Cover from one
-of the user's own Savers.
+Proposing the purchase (S1-14): Up creates the Cover as a pair of Transfer legs, one
+on each Account, about a second apart, with swapped `account` and `transferAccount`,
+equal and opposite amounts, and descriptions starting "Cover to" and "Cover from". The
+purchase is not linked to them. Fathom proposes as the purchase every Transaction on
+the receiving Account with the same amount, created before the Cover, and not already
+claimed by a confirmed Cover. There is no time limit, because a Cover can be made
+while the purchase is held or after it settles. The user picks when there is more
+than one candidate. Up allows no partial Covers, so the amounts always match.
 
 **Split**: One Transaction divided across several categories, by dollar amount or
 percentage, summing to the full amount. Splits never carry transfer logic.
@@ -155,6 +161,4 @@ daily.
 
 Summary of the **Open** items above, to resolve in grilling sessions:
 
-1. The rule for proposing a Cover's purchase, and whether Up allows a Cover for less
-   than the purchase amount (pending S1-14).
-2. The Category and Sub-category taxonomy (pending S1-19).
+1. The Category and Sub-category taxonomy (pending S1-19).
