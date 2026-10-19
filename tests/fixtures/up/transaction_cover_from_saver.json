@@ -2,6 +2,73 @@
   "data": [
     {
       "type": "transactions",
+      "id": "94fbbfd0-7a90-4865-a87d-a314c0418d1b",
+      "attributes": {
+        "status": "SETTLED",
+        "rawText": null,
+        "description": "Cover from Account 8793",
+        "message": null,
+        "isCategorizable": false,
+        "holdInfo": null,
+        "roundUp": null,
+        "cashback": null,
+        "amount": {
+          "currencyCode": "AUD",
+          "value": "175.35",
+          "valueInBaseUnits": 17535
+        },
+        "foreignAmount": null,
+        "cardPurchaseMethod": null,
+        "settledAt": "2026-09-30T17:31:46+10:00",
+        "createdAt": "2026-09-30T17:31:46+10:00",
+        "transactionType": "Transfer",
+        "note": null,
+        "performingCustomer": {
+          "displayName": "$me"
+        },
+        "deepLinkURL": "up://transaction/VHJhbnNhY3Rpb24tNzUxOTkzOTA4Mg=="
+      },
+      "relationships": {
+        "account": {
+          "data": {
+            "type": "accounts",
+            "id": "598f7c49-4161-4c38-b941-345593c41396"
+          },
+          "links": {
+            "related": "https://api.up.com.au/api/v1/accounts/598f7c49-4161-4c38-b941-345593c41396"
+          }
+        },
+        "transferAccount": {
+          "data": {
+            "type": "accounts",
+            "id": "ad87a54c-d9e6-439f-b290-8434b2d91ba4"
+          },
+          "links": {
+            "related": "https://api.up.com.au/api/v1/accounts/ad87a54c-d9e6-439f-b290-8434b2d91ba4"
+          }
+        },
+        "category": {
+          "data": null
+        },
+        "parentCategory": {
+          "data": null
+        },
+        "tags": {
+          "data": [],
+          "links": {
+            "self": "https://api.up.com.au/api/v1/transactions/94fbbfd0-7a90-4865-a87d-a314c0418d1b/relationships/tags"
+          }
+        },
+        "attachment": {
+          "data": null
+        }
+      },
+      "links": {
+        "self": "https://api.up.com.au/api/v1/transactions/94fbbfd0-7a90-4865-a87d-a314c0418d1b"
+      }
+    },
+    {
+      "type": "transactions",
       "id": "a7c007ba-eba7-434e-ab96-c1c65753188c",
       "attributes": {
         "status": "SETTLED",
