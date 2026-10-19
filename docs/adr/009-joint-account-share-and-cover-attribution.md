@@ -58,6 +58,8 @@ The rules that follow from it:
 ## Notes
 
 - Evidence: `data/recon/up/2026-09-20/` (7 accounts, 50 transactions), which includes one partner Cover out of the Joint account and three partner deposits into it.
-- Still open under S1-14: the rule for proposing a Cover's purchase, and whether Up allows a Cover for less than the purchase amount. `tests/fixtures/up/TD_transaction_cover_from_saver.json` is empty and needs a real Cover from one of the user's own Savers.
+- S1-14 findings, from a real Cover out of one of the user's own Savers (`tests/fixtures/up/transaction_cover_from_saver.json`): the Cover is two ordinary Transfer legs, one second apart, with swapped `account` and `transferAccount`, equal and opposite amounts, and descriptions "Cover to …" and "Cover from …". Up gives no link to the purchase. The purchase was still `HELD` when it was Covered and settled about 20 hours later, and a Cover can also be made after settlement. Up allows no partial Covers.
+- The purchase is therefore proposed, never detected: the same amount on the receiving Account, created before the Cover, not already claimed by a confirmed Cover, with no time limit, and the user picks when there is more than one candidate. The rule is written up under Cover in `CONTEXT.md`.
+- Evidence for a Cover on an already-settled purchase is not captured. The rule does not depend on it.
 - Revisit if contributions stop being equal, if uncovered exceptions become common, or if a second co-owner arrangement appears.
 - Terms are defined in `CONTEXT.md`.
