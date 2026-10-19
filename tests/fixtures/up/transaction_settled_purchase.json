@@ -4,7 +4,7 @@
   "attributes": {
     "status": "SETTLED",
     "rawText": "Masked rawText",
-    "description": "Good Heavens",
+    "description": "Bar",
     "message": null,
     "isCategorizable": true,
     "holdInfo": {
@@ -32,7 +32,7 @@
     "transactionType": "Purchase",
     "note": null,
     "performingCustomer": {
-      "displayName": "$userd89ea6"
+      "displayName": "$me"
     },
     "deepLinkURL": "up://transaction/VHJhbnNhY3Rpb24tNDYxNjc0MTA4OA=="
   },

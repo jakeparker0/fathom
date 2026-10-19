@@ -19,18 +19,20 @@ What is masked:
   Transfer's legs still net to zero. Balances no longer reconcile to transactions.
 - Customer handles (``$name``), card suffixes, Up deep links, pagination cursors,
   Tag ids, account display names.
-- Free text: ``message``, ``note`` and ``rawText``; ``description`` on anything that
-  is not a card purchase (Osko payer names and the like). Up-generated transfer
-  descriptions ("Cover to Clothes") keep their prefix and mask the account name.
+- Free text: ``message``, ``note`` and ``rawText``. ``description`` is masked too:
+  card-purchase merchants become ``Merchant xxxx`` unless pinned in the config, and
+  other descriptions (Osko payer names and the like) become "Masked description".
+  Up-generated transfer descriptions ("Cover to Clothes") keep their prefix and mask
+  the account name.
 
 What is kept: dates, currency codes, statuses, transaction types, category ids (Up's
-public taxonomy) and card-purchase merchant names. The merchants kept are listed after
-each run so they can be checked by eye before committing.
+public taxonomy) and the Up-generated parts of transfer descriptions.
 
 Optional ``data/recon/mask-config.json`` (gitignored) pins readable fake values::
 
     {"handles": {"$myhandle": "$me", "$partner": "$partner"},
      "names": {"Clothes": "Saver Clothes"},
+     "merchants": {"Coles": "Supermarket"},
      "keep_names": ["Spending"], "keep_tags": [], "keep_descriptions": []}
 
 After masking, the output is scanned for every real value that was replaced and for
@@ -100,6 +102,7 @@ class MaskConfig(BaseModel):
 
     handles: dict[str, str] = Field(default_factory=dict)
     names: dict[str, str] = Field(default_factory=dict)
+    merchants: dict[str, str] = Field(default_factory=dict)
     keep_names: frozenset[str] = frozenset({"Spending"})
     keep_tags: frozenset[str] = frozenset()
     keep_descriptions: frozenset[str] = frozenset()
@@ -110,7 +113,6 @@ class Masker:
         self._key = key
         self._config = config
         self.replaced: set[str] = set()
-        self.kept_merchants: set[str] = set()
 
     # -- primitives ---------------------------------------------------------
 
@@ -199,13 +201,18 @@ class Masker:
         self._replace(number, str(fake_number))
         return _DEEP_LINK_PREFIX + fake
 
+    def merchant(self, real: str) -> str:
+        fake = self._config.merchants.get(real)
+        if fake is None:
+            fake = "Merchant " + self._digest("merchant", real)[:2].hex()
+        return self._replace(real, fake)
+
     def label(self, value: str) -> str:
         return self.handle(value) if value.startswith("$") else self.account_name(value)
 
     def description(self, value: str, *, card_purchase: bool) -> str:
         if card_purchase:
-            self.kept_merchants.add(value)
-            return self.text(value)
+            return self.merchant(value)
         if value in self._config.keep_descriptions:
             return value
         for prefix in _TRANSFER_PREFIXES:
@@ -346,10 +353,6 @@ def run(
             written.append(destination)
         else:
             _say(f"skipped (empty): {source.relative_to(raw_dir)}")
-    if masker.kept_merchants:
-        _say("Merchant names kept as-is (check before committing):")
-        for merchant in sorted(masker.kept_merchants):
-            _say(f"  {merchant}")
     return written
 
 

@@ -5,7 +5,7 @@
     "attributes": {
       "status": "HELD",
       "rawText": "Masked rawText",
-      "description": "Coles",
+      "description": "Supermarket",
       "message": null,
       "isCategorizable": true,
       "holdInfo": {
@@ -33,7 +33,7 @@
       "transactionType": null,
       "note": null,
       "performingCustomer": {
-        "displayName": "$user1d858b"
+        "displayName": "$partner"
       },
       "deepLinkURL": "up://transaction/VHJhbnNhY3Rpb24tMjE3NjE1NDg1OA=="
     },

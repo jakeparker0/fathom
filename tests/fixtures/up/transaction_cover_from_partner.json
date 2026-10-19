@@ -23,7 +23,7 @@
       "transactionType": "Transfer",
       "note": null,
       "performingCustomer": {
-        "displayName": "$user1d858b"
+        "displayName": "$partner"
       },
       "deepLinkURL": "up://transaction/VHJhbnNhY3Rpb24tMzUxNzI3ODI0NQ=="
     },

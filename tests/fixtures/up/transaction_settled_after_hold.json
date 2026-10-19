@@ -1,0 +1,86 @@
+{
+  "data": {
+    "type": "transactions",
+    "id": "5d8756a1-4ebc-4014-b938-af62c07068cb",
+    "attributes": {
+      "status": "SETTLED",
+      "rawText": "Masked rawText",
+      "description": "Supermarket",
+      "message": null,
+      "isCategorizable": true,
+      "holdInfo": {
+        "amount": {
+          "currencyCode": "AUD",
+          "value": "-342.15",
+          "valueInBaseUnits": -34215
+        },
+        "foreignAmount": null
+      },
+      "roundUp": null,
+      "cashback": null,
+      "amount": {
+        "currencyCode": "AUD",
+        "value": "-342.15",
+        "valueInBaseUnits": -34215
+      },
+      "foreignAmount": null,
+      "cardPurchaseMethod": {
+        "method": "CONTACTLESS",
+        "cardNumberSuffix": null
+      },
+      "settledAt": "2026-09-21T03:19:11+10:00",
+      "createdAt": "2026-09-20T12:44:42+10:00",
+      "transactionType": "Purchase",
+      "note": null,
+      "performingCustomer": {
+        "displayName": "$partner"
+      },
+      "deepLinkURL": "up://transaction/VHJhbnNhY3Rpb24tMjE3NjE1NDg1OA=="
+    },
+    "relationships": {
+      "account": {
+        "data": {
+          "type": "accounts",
+          "id": "f384d2b4-ace4-422c-a238-ebc3fe523f68"
+        },
+        "links": {
+          "related": "https://api.up.com.au/api/v1/accounts/f384d2b4-ace4-422c-a238-ebc3fe523f68"
+        }
+      },
+      "transferAccount": {
+        "data": null
+      },
+      "category": {
+        "data": {
+          "type": "categories",
+          "id": "groceries"
+        },
+        "links": {
+          "self": "https://api.up.com.au/api/v1/transactions/5d8756a1-4ebc-4014-b938-af62c07068cb/relationships/category",
+          "related": "https://api.up.com.au/api/v1/categories/groceries"
+        }
+      },
+      "parentCategory": {
+        "data": {
+          "type": "categories",
+          "id": "home"
+        },
+        "links": {
+          "related": "https://api.up.com.au/api/v1/categories/home"
+        }
+      },
+      "tags": {
+        "data": [],
+        "links": {
+          "self": "https://api.up.com.au/api/v1/transactions/5d8756a1-4ebc-4014-b938-af62c07068cb/relationships/tags"
+        }
+      },
+      "attachment": {
+        "data": null
+      }
+    },
+    "links": {
+      "self": "https://api.up.com.au/api/v1/transactions/5d8756a1-4ebc-4014-b938-af62c07068cb"
+    }
+  }
+}

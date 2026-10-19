@@ -1,0 +1,61 @@
+{
+  "data": {
+    "type": "transactions",
+    "id": "93f29331-fe11-41c2-b3bf-890597711acb",
+    "attributes": {
+      "status": "SETTLED",
+      "rawText": null,
+      "description": "Interest",
+      "message": null,
+      "isCategorizable": false,
+      "holdInfo": null,
+      "roundUp": null,
+      "cashback": null,
+      "amount": {
+        "currencyCode": "AUD",
+        "value": "2.38",
+        "valueInBaseUnits": 238
+      },
+      "foreignAmount": null,
+      "cardPurchaseMethod": null,
+      "settledAt": "2026-10-01T06:59:12+10:00",
+      "createdAt": "2026-10-01T06:59:12+10:00",
+      "transactionType": "Interest",
+      "note": null,
+      "performingCustomer": null,
+      "deepLinkURL": "up://transaction/VHJhbnNhY3Rpb24tNDExMDE4NzMwOA=="
+    },
+    "relationships": {
+      "account": {
+        "data": {
+          "type": "accounts",
+          "id": "96235861-e3dc-4767-a3a0-4571143df086"
+        },
+        "links": {
+          "related": "https://api.up.com.au/api/v1/accounts/96235861-e3dc-4767-a3a0-4571143df086"
+        }
+      },
+      "transferAccount": {
+        "data": null
+      },
+      "category": {
+        "data": null
+      },
+      "parentCategory": {
+        "data": null
+      },
+      "tags": {
+        "data": [],
+        "links": {
+          "self": "https://api.up.com.au/api/v1/transactions/93f29331-fe11-41c2-b3bf-890597711acb/relationships/tags"
+        }
+      },
+      "attachment": {
+        "data": null
+      }
+    },
+    "links": {
+      "self": "https://api.up.com.au/api/v1/transactions/93f29331-fe11-41c2-b3bf-890597711acb"
+    }
+  }
+}

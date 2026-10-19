@@ -1,0 +1,155 @@
+{
+  "data": [
+    {
+      "type": "transactions",
+      "id": "a7c007ba-eba7-434e-ab96-c1c65753188c",
+      "attributes": {
+        "status": "SETTLED",
+        "rawText": null,
+        "description": "Cover to Spending",
+        "message": null,
+        "isCategorizable": false,
+        "holdInfo": null,
+        "roundUp": null,
+        "cashback": null,
+        "amount": {
+          "currencyCode": "AUD",
+          "value": "-175.35",
+          "valueInBaseUnits": -17535
+        },
+        "foreignAmount": null,
+        "cardPurchaseMethod": null,
+        "settledAt": "2026-09-30T17:31:45+10:00",
+        "createdAt": "2026-09-30T17:31:45+10:00",
+        "transactionType": "Transfer",
+        "note": null,
+        "performingCustomer": {
+          "displayName": "$me"
+        },
+        "deepLinkURL": "up://transaction/VHJhbnNhY3Rpb24tNDQ2MzQzMDgzMA=="
+      },
+      "relationships": {
+        "account": {
+          "data": {
+            "type": "accounts",
+            "id": "ad87a54c-d9e6-439f-b290-8434b2d91ba4"
+          },
+          "links": {
+            "related": "https://api.up.com.au/api/v1/accounts/ad87a54c-d9e6-439f-b290-8434b2d91ba4"
+          }
+        },
+        "transferAccount": {
+          "data": {
+            "type": "accounts",
+            "id": "598f7c49-4161-4c38-b941-345593c41396"
+          },
+          "links": {
+            "related": "https://api.up.com.au/api/v1/accounts/598f7c49-4161-4c38-b941-345593c41396"
+          }
+        },
+        "category": {
+          "data": null
+        },
+        "parentCategory": {
+          "data": null
+        },
+        "tags": {
+          "data": [],
+          "links": {
+            "self": "https://api.up.com.au/api/v1/transactions/a7c007ba-eba7-434e-ab96-c1c65753188c/relationships/tags"
+          }
+        },
+        "attachment": {
+          "data": null
+        }
+      },
+      "links": {
+        "self": "https://api.up.com.au/api/v1/transactions/a7c007ba-eba7-434e-ab96-c1c65753188c"
+      }
+    },
+    {
+      "type": "transactions",
+      "id": "6eee2df4-8847-4366-b3ea-ea081109658e",
+      "attributes": {
+        "status": "SETTLED",
+        "rawText": "Masked rawText",
+        "description": "Store",
+        "message": null,
+        "isCategorizable": true,
+        "holdInfo": {
+          "amount": {
+            "currencyCode": "AUD",
+            "value": "-175.35",
+            "valueInBaseUnits": -17535
+          },
+          "foreignAmount": null
+        },
+        "roundUp": null,
+        "cashback": null,
+        "amount": {
+          "currencyCode": "AUD",
+          "value": "-175.35",
+          "valueInBaseUnits": -17535
+        },
+        "foreignAmount": null,
+        "cardPurchaseMethod": {
+          "method": "CONTACTLESS",
+          "cardNumberSuffix": "3185"
+        },
+        "settledAt": "2026-10-01T13:16:42+10:00",
+        "createdAt": "2026-09-30T17:31:17+10:00",
+        "transactionType": "Purchase",
+        "note": null,
+        "performingCustomer": {
+          "displayName": "$me"
+        },
+        "deepLinkURL": "up://transaction/VHJhbnNhY3Rpb24tODQ1MDI0MDcxMw=="
+      },
+      "relationships": {
+        "account": {
+          "data": {
+            "type": "accounts",
+            "id": "598f7c49-4161-4c38-b941-345593c41396"
+          },
+          "links": {
+            "related": "https://api.up.com.au/api/v1/accounts/598f7c49-4161-4c38-b941-345593c41396"
+          }
+        },
+        "transferAccount": {
+          "data": null
+        },
+        "category": {
+          "data": {
+            "type": "categories",
+            "id": "clothing-and-accessories"
+          },
+          "links": {
+            "self": "https://api.up.com.au/api/v1/transactions/6eee2df4-8847-4366-b3ea-ea081109658e/relationships/category",
+            "related": "https://api.up.com.au/api/v1/categories/clothing-and-accessories"
+          }
+        },
+        "parentCategory": {
+          "data": {
+            "type": "categories",
+            "id": "personal"
+          },
+          "links": {
+            "related": "https://api.up.com.au/api/v1/categories/personal"
+          }
+        },
+        "tags": {
+          "data": [],
+          "links": {
+            "self": "https://api.up.com.au/api/v1/transactions/6eee2df4-8847-4366-b3ea-ea081109658e/relationships/tags"
+          }
+        },
+        "attachment": {
+          "data": null
+        }
+      },
+      "links": {
+        "self": "https://api.up.com.au/api/v1/transactions/6eee2df4-8847-4366-b3ea-ea081109658e"
+      }
+    }
+  ]
+}

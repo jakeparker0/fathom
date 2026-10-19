@@ -1,0 +1,94 @@
+{
+  "data": {
+    "type": "transactions",
+    "id": "c366f344-6627-4b36-a4ff-a26a7658da72",
+    "attributes": {
+      "status": "SETTLED",
+      "rawText": "Masked rawText",
+      "description": "Hotel",
+      "message": null,
+      "isCategorizable": true,
+      "holdInfo": {
+        "amount": {
+          "currencyCode": "AUD",
+          "value": "-57.41",
+          "valueInBaseUnits": -5741
+        },
+        "foreignAmount": {
+          "currencyCode": "NPR",
+          "value": "-2384.00",
+          "valueInBaseUnits": -238400
+        }
+      },
+      "roundUp": null,
+      "cashback": null,
+      "amount": {
+        "currencyCode": "AUD",
+        "value": "-57.41",
+        "valueInBaseUnits": -5741
+      },
+      "foreignAmount": {
+        "currencyCode": "NPR",
+        "value": "-2384.00",
+        "valueInBaseUnits": -238400
+      },
+      "cardPurchaseMethod": {
+        "method": "CARD_PIN",
+        "cardNumberSuffix": "3185"
+      },
+      "settledAt": "2024-11-06T03:32:17+11:00",
+      "createdAt": "2024-11-03T16:15:34+11:00",
+      "transactionType": "International Purchase",
+      "note": null,
+      "performingCustomer": {
+        "displayName": "$me"
+      },
+      "deepLinkURL": "up://transaction/VHJhbnNhY3Rpb24tNjA1NTA0MTU1OQ=="
+    },
+    "relationships": {
+      "account": {
+        "data": {
+          "type": "accounts",
+          "id": "598f7c49-4161-4c38-b941-345593c41396"
+        },
+        "links": {
+          "related": "https://api.up.com.au/api/v1/accounts/598f7c49-4161-4c38-b941-345593c41396"
+        }
+      },
+      "transferAccount": {
+        "data": null
+      },
+      "category": {
+        "data": {
+          "type": "categories",
+          "id": "holidays-and-travel"
+        },
+        "links": {
+          "self": "https://api.up.com.au/api/v1/transactions/c366f344-6627-4b36-a4ff-a26a7658da72/relationships/category",
+          "related": "https://api.up.com.au/api/v1/categories/holidays-and-travel"
+        }
+      },
+      "parentCategory": {
+        "data": {
+          "type": "categories",
+          "id": "good-life"
+        },
+        "links": {
+          "related": "https://api.up.com.au/api/v1/categories/good-life"
+        }
+      },
+      "tags": {
+        "data": [],
+        "links": {
+          "self": "https://api.up.com.au/api/v1/transactions/c366f344-6627-4b36-a4ff-a26a7658da72/relationships/tags"
+        }
+      },
+      "attachment": {
+        "data": null
+      }
+    },
+    "links": {
+      "self": "https://api.up.com.au/api/v1/transactions/c366f344-6627-4b36-a4ff-a26a7658da72"
+    }
+  }
+}
