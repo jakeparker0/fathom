@@ -5,7 +5,7 @@
     "attributes": {
       "status": "SETTLED",
       "rawText": null,
-      "description": "Transfer from $userd89ea6",
+      "description": "Transfer from $me",
       "message": "",
       "isCategorizable": false,
       "holdInfo": null,
@@ -23,7 +23,7 @@
       "transactionType": "Transfer",
       "note": null,
       "performingCustomer": {
-        "displayName": "$userd89ea6"
+        "displayName": "$me"
       },
       "deepLinkURL": "up://transaction/VHJhbnNhY3Rpb24tMTAxNjMyMTQ1OA=="
     },
@@ -90,7 +90,7 @@
       "transactionType": "Transfer",
       "note": null,
       "performingCustomer": {
-        "displayName": "$userd89ea6"
+        "displayName": "$me"
       },
       "deepLinkURL": "up://transaction/VHJhbnNhY3Rpb24tODI0Mjc1MzI5OA=="
     },

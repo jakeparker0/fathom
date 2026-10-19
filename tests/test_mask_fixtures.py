@@ -129,17 +129,25 @@ def test_configured_handle_is_used_and_unknown_handle_is_hashed(masker: Masker) 
     assert str(other["displayName"]).startswith("$user")
 
 
-def test_card_purchase_keeps_its_merchant_but_not_its_raw_text(masker: Masker) -> None:
-    node = transaction(
+def test_card_purchase_merchant_is_generic_and_raw_text_is_masked() -> None:
+    masker = Masker(b"k", MaskConfig(merchants={"Good Heavens": "Bar"}))
+    other = transaction(
+        cardPurchaseMethod={"method": "CONTACTLESS", "cardNumberSuffix": "3134"},
+        rawText="Good Heavens, Melbourne",
+        description="Coles",
+    )
+    pinned = transaction(
         cardPurchaseMethod={"method": "CONTACTLESS", "cardNumberSuffix": "3134"},
         rawText="Good Heavens, Melbourne",
     )
-    attrs = attributes(masker.mask(node))
 
-    assert attrs["description"] == "Good Heavens"
-    assert attrs["rawText"] == "Masked rawText"
-    assert attrs["cardPurchaseMethod"] != node["attributes"]["cardPurchaseMethod"]  # type: ignore[index]
-    assert "Good Heavens" in masker.kept_merchants
+    pinned_attrs = attributes(masker.mask(pinned))
+    other_attrs = attributes(masker.mask(other))
+
+    assert pinned_attrs["description"] == "Bar"
+    assert pinned_attrs["rawText"] == "Masked rawText"
+    assert str(other_attrs["description"]).startswith("Merchant ")
+    assert "Coles" not in json.dumps(other_attrs)
 
 
 def test_payer_name_and_message_are_masked_on_a_non_card_transaction(

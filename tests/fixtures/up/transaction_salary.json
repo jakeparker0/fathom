@@ -1,0 +1,66 @@
+{
+  "data": {
+    "type": "transactions",
+    "id": "09f90e4e-cd00-4db9-b7cb-08c45ff93ee0",
+    "attributes": {
+      "status": "SETTLED",
+      "rawText": "Masked rawText",
+      "description": "Masked description",
+      "message": "Masked message",
+      "isCategorizable": true,
+      "holdInfo": null,
+      "roundUp": null,
+      "cashback": null,
+      "amount": {
+        "currencyCode": "AUD",
+        "value": "4708.47",
+        "valueInBaseUnits": 470847
+      },
+      "foreignAmount": null,
+      "cardPurchaseMethod": null,
+      "settledAt": "2026-10-15T12:47:37+11:00",
+      "createdAt": "2026-10-15T12:47:37+11:00",
+      "transactionType": "Salary",
+      "note": null,
+      "performingCustomer": {
+        "displayName": "$me"
+      },
+      "deepLinkURL": "up://transaction/VHJhbnNhY3Rpb24tNDU1OTE1MDYxMg=="
+    },
+    "relationships": {
+      "account": {
+        "data": {
+          "type": "accounts",
+          "id": "598f7c49-4161-4c38-b941-345593c41396"
+        },
+        "links": {
+          "related": "https://api.up.com.au/api/v1/accounts/598f7c49-4161-4c38-b941-345593c41396"
+        }
+      },
+      "transferAccount": {
+        "data": null
+      },
+      "category": {
+        "data": null,
+        "links": {
+          "self": "https://api.up.com.au/api/v1/transactions/09f90e4e-cd00-4db9-b7cb-08c45ff93ee0/relationships/category"
+        }
+      },
+      "parentCategory": {
+        "data": null
+      },
+      "tags": {
+        "data": [],
+        "links": {
+          "self": "https://api.up.com.au/api/v1/transactions/09f90e4e-cd00-4db9-b7cb-08c45ff93ee0/relationships/tags"
+        }
+      },
+      "attachment": {
+        "data": null
+      }
+    },
+    "links": {
+      "self": "https://api.up.com.au/api/v1/transactions/09f90e4e-cd00-4db9-b7cb-08c45ff93ee0"
+    }
+  }
+}

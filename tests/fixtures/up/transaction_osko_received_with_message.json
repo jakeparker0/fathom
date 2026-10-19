@@ -23,7 +23,7 @@
       "transactionType": "Osko Payment Received",
       "note": null,
       "performingCustomer": {
-        "displayName": "$userd89ea6"
+        "displayName": "$me"
       },
       "deepLinkURL": "up://transaction/VHJhbnNhY3Rpb24tMTg3MzM5MjM2Mg=="
     },
