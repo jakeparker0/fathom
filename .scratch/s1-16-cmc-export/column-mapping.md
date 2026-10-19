@@ -133,6 +133,16 @@ Candidates, to be decided in S1-23 and a follow-up ticket:
 7. Pre-FY positions: Trade history only starts at 01/07/2025. Earlier statements
    are needed before any Holding can be derived (Jake to supply). - Yes i will supply
 
+## Follow-ups
+
+- **Rounding swap.** `scripts/mask_cmc_fixtures.py` has its own `trade_cents`
+  (quantity × price to cents, round-half-up) because the single rounding function in
+  `domain/` (ADR-004 Amendment) does not exist yet. When that function lands, make the
+  script call it, delete `trade_cents`, and rerun
+  `uv run python scripts/mask_cmc_fixtures.py`. If the rounding rule differs from
+  half-up, any fixture row that changes shows where. None of the current 34 trades is
+  a half-cent case. Add this to the ticket that writes the rounding function.
+
 ## Reviewed and rejected
 
 - **Statement.csv**: every trade in it is already in `Confirmation.csv` with fees split
