@@ -19,7 +19,7 @@ Four pieces of work run outside a user request:
 
 Constraints that shape the choice:
 
-- **Idempotent reruns are required, not optional.** Up sync upserts on transaction ID (S1-15 confirms whether those IDs are stable enough to trust); snapshots are keyed by holding and date. Running twice must never duplicate.
+- **Idempotent reruns are required, not optional.** Up sync upserts on transaction ID (IDs are stable across HELD to SETTLED, see `docs/up-api.md`); snapshots are keyed by holding and date. Running twice must never duplicate.
 - **Status has to reach the UI.** ET-02 requires a visible last-successful-sync timestamp and surfaced failures. That means job runs are persisted — a `job_run` table with job name, started/finished timestamps, status, row counts and error — regardless of which mechanism runs them. This is a data-model consequence that currently has no home in S1-20 to S1-24.
 - **Two different environments.** Sprint 1 to 5 run locally on a laptop that is closed at night, so daily jobs will miss their window routinely and need catch-up-on-next-start behaviour. Sprint 6 moves everything to a single always-on AWS host, where a plain timer is reliable.
 - **Small scale.** One user, a few hundred transactions a month, a handful of ASX codes. Nothing here needs a distributed queue for throughput; it may need one for operational features.
@@ -86,7 +86,7 @@ This is explicitly a first choice, not a final one. APScheduler stays the named 
 
 - Pricing and snapshot are one ordered daily pipeline (SP-08 then SP-11), not two independent schedules — a single entry point that runs both in order, so the snapshot can never run against stale prices.
 - SP-12's backfill is a separate on-demand entry point triggered by the import, not a scheduled job. Being long-running and out-of-band is precisely the case that would later argue for APScheduler.
-- Idempotency is an application property, not a scheduler feature: Up sync upserts on transaction ID (pending S1-15 confirming those IDs are stable), snapshots are keyed by holding and date. Running any job twice must change nothing the second time.
+- Idempotency is an application property, not a scheduler feature: Up sync upserts on transaction ID (IDs are stable across HELD to SETTLED, see `docs/up-api.md`), snapshots are keyed by holding and date. Running any job twice must change nothing the second time.
 
 **What the deferral costs**
 
