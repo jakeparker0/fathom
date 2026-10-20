@@ -31,19 +31,28 @@ free text. After masking, the output is scanned for every real identifier replac
 
 from __future__ import annotations
 
-import argparse
 import csv
-import hashlib
-import hmac
 import io
 import re
 import sys
 from dataclasses import dataclass
-from decimal import ROUND_HALF_UP, Decimal, InvalidOperation
+from decimal import ROUND_HALF_UP, Decimal
 from enum import StrEnum
 from pathlib import Path
 
-from mask_fixtures import DEFAULT_KEY_PATH, MaskConfig, Masker, MaskError, load_key
+from mask_fixtures import (
+    DEFAULT_KEY_PATH,
+    KeyedFaker,
+    MaskConfig,
+    Masker,
+    MaskError,
+    check_no_leaks,
+    cli,
+    format_cents,
+    load_key,
+    write_all,
+)
+from mask_fixtures import parse_cents as parse_dollars
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_RAW_DIR = REPO_ROOT / "data" / "recon" / "cmc"
@@ -66,7 +75,6 @@ _FEE_COLUMNS = (
 )
 _QUANTITY_FACTORS = range(2, 9)
 _CENTS_PER_DOLLAR = 100
-_MIN_LEAK_LENGTH = 4
 
 _TRADE_LINE = re.compile(r"(Bght|Sold) (\S+) ([A-Z0-9]+) @ (\S+) AUD (\d+)")
 _JOURNAL = re.compile(r"JNL(\d+) \]NPP VRN:(\d+) DEP:(\d+)")
@@ -108,18 +116,8 @@ class CashEntry:
 
 
 def parse_cents(text: str) -> int:
-    """Whole cents from a dollar string. A fractional cent is an error, not rounded."""
-    if not text:
-        return 0
-    try:
-        value = Decimal(text) * _CENTS_PER_DOLLAR
-    except InvalidOperation as exc:
-        msg = f"not an amount: {text!r}"
-        raise MaskError(msg) from exc
-    if value != value.to_integral_value():
-        msg = f"amount is not whole cents: {text!r}"
-        raise MaskError(msg)
-    return int(value)
+    """Whole cents from a dollar string; a blank cell is zero."""
+    return parse_dollars(text) if text else 0
 
 
 def trade_cents(quantity: Decimal, price: Decimal) -> int:
@@ -132,30 +130,22 @@ def trade_cents(quantity: Decimal, price: Decimal) -> int:
     return int(exact.quantize(Decimal(1), rounding=ROUND_HALF_UP))
 
 
-def format_cents(cents: int) -> str:
-    sign = "-" if cents < 0 else ""
-    return (
-        f"{sign}{abs(cents) // _CENTS_PER_DOLLAR}.{abs(cents) % _CENTS_PER_DOLLAR:02d}"
-    )
-
-
 def _amount_cell(cents: int) -> str:
     return format_cents(cents) if cents else ""
 
 
 class CmcMasker:
     def __init__(self, key: bytes) -> None:
-        self._key = key
         self._money = Masker(key, MaskConfig())
+        self._faker = KeyedFaker(key)
         self._numbers: dict[tuple[str, str], str] = {}
         self._taken: set[tuple[str, str]] = set()
-        self.real_values: set[str] = set()
+
+    @property
+    def real_values(self) -> set[str]:
+        return self._faker.real_values
 
     # -- primitives ---------------------------------------------------------
-
-    def _digest(self, label: str, real: str) -> bytes:
-        message = f"{label}\0{real}".encode()
-        return hmac.new(self._key, message, hashlib.sha256).digest()
 
     def number(self, label: str, real: str) -> str:
         """Fake digits of the same length. Same input, same output; no two collide."""
@@ -163,18 +153,19 @@ class CmcMasker:
         if known is not None:
             return known
         low = 10 ** (len(real) - 1)
-        fake = str(low + int.from_bytes(self._digest(label, real)[:8]) % (9 * low))
+        fake = str(
+            low + int.from_bytes(self._faker.digest(label, real)[:8]) % (9 * low)
+        )
         if (label, fake) in self._taken:
             msg = f"two different {label} values masked to the same number"
             raise MaskError(msg)
         self._taken.add((label, fake))
         self._numbers[(label, real)] = fake
-        if len(real) >= _MIN_LEAK_LENGTH:
-            self.real_values.add(real)
+        self._faker.remember(real)
         return fake
 
     def factor(self, code: str) -> int:
-        digest = self._digest("quantity", code)
+        digest = self._faker.digest("quantity", code)
         return _QUANTITY_FACTORS[digest[0] % len(_QUANTITY_FACTORS)]
 
     # -- Confirmation.csv ---------------------------------------------------
@@ -212,7 +203,7 @@ class CmcMasker:
         gross = trade_cents(quantity, price)
         cents = gross - fees if side is Side.SELL else gross + fees
         reference = self.number("reference", row["Confirmation Number"])
-        self.real_values.add(row["Account Name"])
+        self._faker.real_values.add(row["Account Name"])
         fake_row = {
             **row,
             "Account Number": self.number("account", row["Account Number"]),
@@ -406,14 +397,6 @@ def render(
     return (_BOM if bom else "") + _CRLF.join(lines) + _CRLF
 
 
-def check_output(texts: dict[str, str], masker: CmcMasker) -> None:
-    for name, text in texts.items():
-        for real in masker.real_values:
-            if re.search(rf"(?<![\w.]){re.escape(real)}(?![\w.])", text):
-                msg = f"{name}: a real value survived masking"
-                raise MaskError(msg)
-
-
 def find_cash_summary(raw_dir: Path) -> Path:
     found = sorted(raw_dir.glob("CashTransactionSummary*.csv"))
     if len(found) != 1:
@@ -456,35 +439,12 @@ def run(
         ),
         CASH_NAME: render(cash_rows, bom=cash.bom, quote=None, quote_header=True),
     }
-    check_output(texts, masker)
-    out_dir.mkdir(parents=True, exist_ok=True)
-    written = []
-    for name, text in texts.items():
-        destination = out_dir / name
-        destination.write_bytes(text.encode("utf-8"))
-        written.append(destination)
-    return written
-
-
-def _say(message: str) -> None:
-    sys.stdout.write(message + "\n")
+    check_no_leaks(texts, masker.real_values)
+    return write_all(texts, out_dir)
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
-    parser.add_argument("--raw", type=Path, default=DEFAULT_RAW_DIR)
-    parser.add_argument("--out", type=Path, default=DEFAULT_OUT_DIR)
-    args = parser.parse_args()
-    if not args.raw.is_dir():
-        _say(f"No raw exports at {args.raw}")
-        return 1
-    try:
-        written = run(args.raw, args.out)
-    except (MaskError, OSError) as exc:
-        _say(f"ABORTED: {exc}")
-        return 1
-    _say(f"Masked {len(written)} file(s) into {args.out}")
-    return 0
+    return cli(__doc__ or "", DEFAULT_RAW_DIR, DEFAULT_OUT_DIR, run)
 
 
 if __name__ == "__main__":

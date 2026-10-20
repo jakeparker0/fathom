@@ -7,7 +7,17 @@ import json
 from typing import TYPE_CHECKING
 
 import pytest
-from mask_fixtures import Json, MaskConfig, Masker, MaskError, run
+from mask_fixtures import (
+    Json,
+    KeyedFaker,
+    MaskConfig,
+    Masker,
+    MaskError,
+    check_no_leaks,
+    format_cents,
+    parse_cents,
+    run,
+)
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -235,3 +245,34 @@ def test_run_writes_masked_files_and_skips_empty_captures(tmp_path: Path) -> Non
     assert content.endswith("\n")
     assert REAL_TXN not in content
     assert not (out / "TD_empty.json").exists()
+
+
+def test_keyed_faker_swaps_digits_keeps_other_characters_and_repeats() -> None:
+    faker = KeyedFaker(b"test-key")
+    fake = faker.shaped("ref", "AB12-3456")
+    assert fake != "AB12-3456"
+    assert (fake[:2], fake[4]) == ("AB", "-")
+    assert fake.replace("AB", "").replace("-", "").isdigit()
+    assert faker.shaped("ref", "AB12-3456") == fake
+    assert faker.shaped("ref", "AB12-3457") != fake
+    assert "AB12-3456" in faker.real_values
+
+
+def test_keyed_faker_does_not_track_values_too_short_to_scan_for() -> None:
+    faker = KeyedFaker(b"test-key")
+    faker.shaped("ref", "123")
+    assert faker.real_values == set()
+
+
+def test_a_surviving_real_value_is_caught_by_the_leak_scan() -> None:
+    check_no_leaks({"a.csv": "nothing real here"}, {"900123"})
+    with pytest.raises(MaskError, match=r"a\.csv"):
+        check_no_leaks({"a.csv": "ref 900123 end"}, {"900123"})
+
+
+def test_cents_round_trip_with_sign_and_reject_fractions() -> None:
+    assert parse_cents("-12.50") == -1250
+    assert format_cents(-1250) == "-12.50"
+    assert format_cents(5) == "0.05"
+    with pytest.raises(MaskError):
+        parse_cents("1.005")

@@ -51,10 +51,15 @@ import re
 import secrets
 import sys
 import uuid
+from decimal import Decimal, InvalidOperation
 from pathlib import Path
+from typing import TYPE_CHECKING
 from urllib.parse import quote, unquote
 
 from pydantic import BaseModel, ConfigDict, Field
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 type Json = dict[str, Json] | list[Json] | str | int | float | bool | None
 
@@ -354,6 +359,113 @@ def run(
         else:
             _say(f"skipped (empty): {source.relative_to(raw_dir)}")
     return written
+
+
+# -- shared by the export maskers (AMEX, Bendigo, CMC) --------------------------------
+
+
+def parse_cents(text: str) -> int:
+    """Whole cents, signed, from a dollar string. A fractional cent is an error."""
+    try:
+        value = Decimal(text) * _CENTS_PER_DOLLAR
+    except InvalidOperation as exc:
+        msg = f"not an amount: {text!r}"
+        raise MaskError(msg) from exc
+    if value != value.to_integral_value():
+        msg = f"amount is not whole cents: {text!r}"
+        raise MaskError(msg)
+    return int(value)
+
+
+def format_cents(cents: int) -> str:
+    sign = "-" if cents < 0 else ""
+    return (
+        f"{sign}{abs(cents) // _CENTS_PER_DOLLAR}.{abs(cents) % _CENTS_PER_DOLLAR:02d}"
+    )
+
+
+class KeyedFaker:
+    """Repeatable fake values keyed by the secret, plus the real values replaced.
+
+    ``shaped`` swaps each digit and keeps every other character. The same input always
+    gives the same output, and two different inputs never share one. ``real_values``
+    feeds ``check_no_leaks``.
+    """
+
+    def __init__(self, key: bytes) -> None:
+        self._key = key
+        self._known: dict[tuple[str, str], str] = {}
+        self._taken: set[tuple[str, str]] = set()
+        self.real_values: set[str] = set()
+
+    def digest(self, label: str, real: str) -> bytes:
+        message = f"{label}\0{real}".encode()
+        return hmac.new(self._key, message, hashlib.sha256).digest()
+
+    def remember(self, real: str) -> None:
+        if len(real) >= _MIN_LEAK_LENGTH:
+            self.real_values.add(real)
+
+    def shaped(self, label: str, real: str) -> str:
+        known = self._known.get((label, real))
+        if known is not None:
+            return known
+        attempt = 0
+        while True:
+            stream = iter(self.digest(f"{label}#{attempt}", real))
+            fake = "".join(
+                str(next(stream) % 10) if char.isdigit() else char for char in real
+            )
+            if fake != real and (label, fake) not in self._taken:
+                break
+            attempt += 1
+        self._taken.add((label, fake))
+        self._known[(label, real)] = fake
+        self.remember(real)
+        return fake
+
+
+def check_no_leaks(texts: dict[str, str], real_values: set[str]) -> None:
+    for name, text in texts.items():
+        for real in real_values:
+            if re.search(rf"(?<![\w.]){re.escape(real)}(?![\w.])", text):
+                msg = f"{name}: a real value survived masking"
+                raise MaskError(msg)
+
+
+def write_all(texts: dict[str, str], out_dir: Path) -> list[Path]:
+    """Write every file, creating ``out_dir``. Call only after every file passed."""
+    out_dir.mkdir(parents=True, exist_ok=True)
+    written = []
+    for name, text in texts.items():
+        destination = out_dir / name
+        destination.write_bytes(text.encode("utf-8"))
+        written.append(destination)
+    return written
+
+
+def cli(
+    description: str,
+    default_raw: Path,
+    default_out: Path,
+    run_all: Callable[[Path, Path], list[Path]],
+) -> int:
+    parser = argparse.ArgumentParser(
+        description=description.split("\n\n", maxsplit=1)[0]
+    )
+    parser.add_argument("--raw", type=Path, default=default_raw)
+    parser.add_argument("--out", type=Path, default=default_out)
+    args = parser.parse_args()
+    if not args.raw.is_dir():
+        _say(f"No raw exports at {args.raw}")
+        return 1
+    try:
+        written = run_all(args.raw, args.out)
+    except (MaskError, OSError) as exc:
+        _say(f"ABORTED: {exc}")
+        return 1
+    _say(f"Masked {len(written)} file(s) into {args.out}")
+    return 0
 
 
 def _say(message: str) -> None:

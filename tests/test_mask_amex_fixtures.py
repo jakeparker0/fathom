@@ -8,7 +8,7 @@ import re
 from pathlib import Path
 
 import pytest
-from mask_amex_fixtures import SUBSET_SIZE, run
+from mask_amex_fixtures import COMMISSION_RATES, RATE_SCALE, SUBSET_SIZE, run
 from mask_fixtures import MaskError
 
 FIXTURES = Path(__file__).parent / "fixtures" / "amex"
@@ -285,7 +285,8 @@ def test_commission_stays_a_fixed_share_of_the_amount_before_commission(
         commission = cents(r["Commission"])
         base = cents(r["Amount"]) - commission
         assert any(
-            abs(commission * 10000 - base * rate) <= 10000 for rate in (300, 350)
+            abs(commission * RATE_SCALE - base * rate) <= RATE_SCALE
+            for rate in COMMISSION_RATES
         )
 
 
@@ -431,7 +432,7 @@ def test_a_three_and_a_half_percent_commission_stays_three_and_a_half_percent(
     row = masked(raw, tmp_path)[6]
     commission = cents(row["Commission"])
     base = cents(row["Amount"]) - commission
-    assert abs(commission * 10000 - base * 350) <= 10000
+    assert abs(commission * RATE_SCALE - base * 350) <= RATE_SCALE
 
 
 def test_the_same_merchant_masks_the_same_across_files(tmp_path: Path) -> None:

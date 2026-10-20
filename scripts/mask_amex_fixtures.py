@@ -44,10 +44,7 @@ masking, the output is scanned for every real identifier replaced.
 
 from __future__ import annotations
 
-import argparse
 import csv
-import hashlib
-import hmac
 import io
 import re
 import sys
@@ -58,11 +55,17 @@ from pathlib import Path
 from mask_fixtures import (
     DEFAULT_CONFIG_PATH,
     DEFAULT_KEY_PATH,
+    KeyedFaker,
     MaskConfig,
     Masker,
     MaskError,
+    check_no_leaks,
+    cli,
+    format_cents,
     load_config,
     load_key,
+    parse_cents,
+    write_all,
 )
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -88,15 +91,14 @@ HEADER = [
 ]
 
 _BOM = "﻿"
-_MIN_LEAK_LENGTH = 4
 _DESCRIPTION_WIDTH = 23
 _FAKE_TOWN = "TESTVILLE"
 _FAKE_PLACE = "TESTTOWN"
 _FAKE_STREET = "1 TEST STREET"
 # Commission as hundredths of a percent of the amount before commission. Seen: 3.00%
 # in 2025 and 3.50% in 2026. Not assumed to be fixed: the importer must store it.
-_COMMISSION_RATES = (300, 350)
-_RATE_SCALE = 10_000
+COMMISSION_RATES = (300, 350)
+RATE_SCALE = 10_000
 # Selects fixture rows only. It is not a period rule: periods come from the resolver.
 _BOUNDARY_DAY = "14"
 
@@ -128,16 +130,12 @@ class RefShape(StrEnum):
     FEE = "fee"
 
 
-def parse_cents(text: str) -> int:
+def plain_cents(text: str) -> int:
+    """Cents from an AMEX amount, which is always plain with two decimals."""
     if _AMOUNT.fullmatch(text) is None:
         msg = f"not a plain two-decimal amount: {text!r}"
         raise MaskError(msg)
-    return int(text.replace(".", ""))
-
-
-def format_cents(cents: int) -> str:
-    sign = "-" if cents < 0 else ""
-    return f"{sign}{abs(cents) // 100}.{abs(cents) % 100:02d}"
+    return parse_cents(text)
 
 
 def _tidy(description: str) -> str:
@@ -168,38 +166,13 @@ def reference_shape(reference: str) -> RefShape:
 
 class AmexMasker:
     def __init__(self, key: bytes, config: MaskConfig) -> None:
-        self._key = key
         self._config = config
         self._money = Masker(key, config)
-        self._known: dict[tuple[str, str], str] = {}
-        self._taken: set[tuple[str, str]] = set()
-        self.real_values: set[str] = set()
+        self._faker = KeyedFaker(key)
 
-    # -- primitives ---------------------------------------------------------
-
-    def _digest(self, label: str, real: str) -> bytes:
-        message = f"{label}\0{real}".encode()
-        return hmac.new(self._key, message, hashlib.sha256).digest()
-
-    def _remember(self, real: str) -> None:
-        if len(real) >= _MIN_LEAK_LENGTH:
-            self.real_values.add(real)
-
-    def digits(self, label: str, real: str) -> str:
-        """Fake digits of the same length. Same input, same output; none collide."""
-        known = self._known.get((label, real))
-        if known is not None:
-            return known
-        attempt = 0
-        while True:
-            stream = iter(self._digest(f"{label}#{attempt}", real))
-            fake = "".join(str(next(stream) % 10) for _ in real)
-            if fake != real and (label, fake) not in self._taken:
-                break
-            attempt += 1
-        self._taken.add((label, fake))
-        self._known[(label, real)] = fake
-        return fake
+    @property
+    def real_values(self) -> set[str]:
+        return self._faker.real_values
 
     # -- one row ------------------------------------------------------------
 
@@ -215,7 +188,7 @@ class AmexMasker:
         if row["Description"] != row["Appears On Your Statement As"]:
             msg = "Description and Appears On Your Statement As differ"
             raise MaskError(msg)
-        real_cents = parse_cents(row["Amount"])
+        real_cents = plain_cents(row["Amount"])
         fake_cents = self._money.cents(abs(real_cents))
         description = self._mask_description(row["Description"])
         foreign, commission = self._mask_foreign(row, abs(real_cents), fake_cents)
@@ -243,10 +216,10 @@ class AmexMasker:
         online = _ONLINE_PAYMENT.fullmatch(tidy)
         if online:
             wording, number = online.groups()
-            self._remember(number)
-            return wording + "W" + self.digits("online", number[1:])
-        self._remember(description)
-        self._remember(tidy)
+            self._faker.remember(number)
+            return wording + "W" + self._faker.shaped("online", number[1:])
+        self._faker.remember(description)
+        self._faker.remember(tidy)
         pinned = next(
             (
                 fake
@@ -262,7 +235,7 @@ class AmexMasker:
         if not real:
             return real
         for part in real.split("\n"):
-            self._remember(part)
+            self._faker.remember(part)
         return multiple if "\n" in real else single
 
     @staticmethod
@@ -273,8 +246,8 @@ class AmexMasker:
 
     def _mask_reference(self, real: str) -> str:
         _, keep, tail = split_reference(real)
-        self._remember(real.strip("'"))
-        return f"'{keep}{self.digits('reference', tail)}'"
+        self._faker.remember(real.strip("'"))
+        return f"'{keep}{self._faker.shaped('reference', tail)}'"
 
     def _mask_foreign(
         self, row: Row, real_total: int, fake_total: int
@@ -286,7 +259,7 @@ class AmexMasker:
         if match is None or not commission:
             msg = "foreign amount and commission must come together in a known form"
             raise MaskError(msg)
-        real_commission = parse_cents(commission)
+        real_commission = plain_cents(commission)
         rate = self._rate(real_total, real_commission)
         fake_commission = self._commission(fake_total, rate)
         real_base = real_total - real_commission
@@ -302,11 +275,11 @@ class AmexMasker:
     @staticmethod
     def _fits(commission: int, base: int, rate: int) -> bool:
         """Within a cent of ``rate`` of ``base``: AMEX rounds before converting."""
-        return abs(commission * _RATE_SCALE - base * rate) <= _RATE_SCALE
+        return abs(commission * RATE_SCALE - base * rate) <= RATE_SCALE
 
     def _rate(self, total: int, commission: int) -> int:
         base = total - commission
-        for rate in _COMMISSION_RATES:
+        for rate in COMMISSION_RATES:
             if self._fits(commission, base, rate):
                 return rate
         msg = "commission fits neither 3.00% nor 3.50% of the amount before commission"
@@ -314,7 +287,7 @@ class AmexMasker:
 
     def _commission(self, total: int, rate: int) -> int:
         """Commission such that it is ``rate`` of the amount before commission."""
-        commission = (total * rate + (_RATE_SCALE + rate) // 2) // (_RATE_SCALE + rate)
+        commission = (total * rate + (RATE_SCALE + rate) // 2) // (RATE_SCALE + rate)
         if commission < 1 or not self._fits(commission, total - commission, rate):
             msg = "no commission fits the masked amount"
             raise MaskError(msg)
@@ -413,14 +386,6 @@ def render(rows: list[Row], *, final_newline: bool) -> str:
     return text if final_newline else text.removesuffix("\n")
 
 
-def check_output(texts: dict[str, str], masker: AmexMasker) -> None:
-    for name, text in texts.items():
-        for real in masker.real_values:
-            if re.search(rf"(?<![\w.]){re.escape(real)}(?![\w.])", text):
-                msg = f"{name}: a real value survived masking"
-                raise MaskError(msg)
-
-
 def run(
     raw_dir: Path,
     out_dir: Path,
@@ -438,35 +403,12 @@ def run(
         rows, final_newline = read_export(source)
         masked = [masker.mask_row(row) for row in select_rows(rows)]
         texts[source.name] = render(masked, final_newline=final_newline)
-    check_output(texts, masker)
-    out_dir.mkdir(parents=True, exist_ok=True)
-    written = []
-    for name, text in texts.items():
-        destination = out_dir / name
-        destination.write_bytes(text.encode("utf-8"))
-        written.append(destination)
-    return written
-
-
-def _say(message: str) -> None:
-    sys.stdout.write(message + "\n")
+    check_no_leaks(texts, masker.real_values)
+    return write_all(texts, out_dir)
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
-    parser.add_argument("--raw", type=Path, default=DEFAULT_RAW_DIR)
-    parser.add_argument("--out", type=Path, default=DEFAULT_OUT_DIR)
-    args = parser.parse_args()
-    if not args.raw.is_dir():
-        _say(f"No raw exports at {args.raw}")
-        return 1
-    try:
-        written = run(args.raw, args.out)
-    except (MaskError, OSError) as exc:
-        _say(f"ABORTED: {exc}")
-        return 1
-    _say(f"Masked {len(written)} file(s) into {args.out}")
-    return 0
+    return cli(__doc__ or "", DEFAULT_RAW_DIR, DEFAULT_OUT_DIR, run)
 
 
 if __name__ == "__main__":
