@@ -99,13 +99,13 @@ several partial Reimbursements. Linking is manual in v1.
 _Avoid_: "refund". A Refund is not a Reimbursement.
 
 **Refund**: Money returned by a merchant for an earlier purchase. It is negative Spend
-in the original purchase's category, counted in the period it arrives. Never Income
-and never a Reimbursement.
+in the original purchase's Category and Sub-category, counted in the period it
+arrives. Never Income and never a Reimbursement.
 
 ## Reporting
 
 **Spend**: Outgoing money that counts towards spending totals. Includes purchases,
-External payments, Partner-covered purchases, fees and interest charged, less Refunds.
+External payments, Partner-covered purchases, fees and Interest charged, less Refunds.
 Excludes Transfers, Partner transfers and Cover transfer legs, with no toggle to
 include them. Each amount counts at the share of the Account it is attributed to.
 Reported net of Reimbursements by default; gross is an opt-in view.
@@ -114,14 +114,30 @@ Reported net of Reimbursements by default; gross is an opt-in view.
 default everywhere.
 
 **Income**: Incoming money that is not a Transfer or Reimbursement, tracked as distinct
-types: salary and interest (savings accounts and Term deposits).
+types: salary and Interest earned (savings accounts and Term deposits).
 
-**Category / Sub-category**: How Spend is classified. User-managed, extending Up's
-built-in categories. Each category may have one or more sub-categories.
-_Open_: the taxonomy itself, pending S1-19.
+**Interest earned / Interest charged**: Interest paid to the user on a savings account
+or Term deposit is Interest earned, and is Income. Interest the user pays on a balance
+owed (e.g. AMEX) is Interest charged, and is Spend.
+_Avoid_: "interest" on its own.
+
+**Group / Category / Sub-category**: How Spend is classified, in at most three levels.
+A Category is *what* the money bought. A Group holds Categories and never a
+Transaction. Each piece of Spend (a Transaction, or each part of a Split) has one
+Category, or one Sub-category within it, so Category totals add up to total Spend.
+Up's Groups and Categories are kept as Up defines them, and the user adds their own
+alongside. Names are unique among siblings only, so the full path ("Home → Other")
+identifies a Category. Transfers, Cover transfer legs, Income and Reimbursements never
+take a Category.
+_Avoid_: "parent category", Up's name for a Group.
+
+**Uncategorised**: The state of Spend that has no Category yet. A state, never a
+Category: reports show it as its own line so totals still add up.
 
 **Tag**: A user-managed label applied to Transactions, many-to-many (e.g. "Holiday
-2026", "Tax deductible"). Independent of Category.
+2026", "Work", "Surfing"). A Tag is *why* or *for what* the money was spent and cuts
+across Categories, so Tag totals can overlap. A pastime that spans several kinds of
+purchase is a Tag, not a Category. Independent of Category.
 
 **Subscription**: A recurring charge detected heuristically (same merchant, similar
 amount, regular interval).
@@ -161,4 +177,4 @@ daily.
 
 Summary of the **Open** items above, to resolve in grilling sessions:
 
-1. The Category and Sub-category taxonomy (pending S1-19).
+None open.
